@@ -1,0 +1,15 @@
+model Tenant {
+  id            String         @id
+  name          String
+  description   String?
+  url           String?
+  /// @zod.url()
+  avatar        String?
+  /// @zod.email()
+  email         String?        @unique
+  collaborators Collaborator[]
+  isDeleted     Boolean        @default(false)
+  createdAt     DateTime?      @default(now())
+  updatedAt     DateTime?      @updatedAt
+  deletedAt     DateTime?
+}
