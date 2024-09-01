@@ -1,4 +1,4 @@
-model Tenant {
+model Application {
   id          String  @id
   name        String
   description String?
@@ -6,8 +6,7 @@ model Tenant {
   url         String?
   /// @zod.url()
   avatar      String?
-  /// @zod.email()
-  email       String? @unique
+  jsonData    Json? // aca vamos a guardar por ejemplo las organizations de github
 
   isDeleted Boolean   @default(false)
   createdAt DateTime? @default(now())
@@ -17,6 +16,6 @@ model Tenant {
   deletedAt DateTime?
   deletedBy String?
 
-  ApplicationTenant  ApplicationTenant[]
-  CollaboratorTenant CollaboratorTenant[]
+  ApplicationCollaborator ApplicationCollaborator[]
+  ApplicationTenant       ApplicationTenant[]
 }

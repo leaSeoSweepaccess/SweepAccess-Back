@@ -1,16 +1,13 @@
-import { tenantRepository } from '@/repositories/tenant/tenantRepository';
+import { applicationTenantRepository } from '@/repositories/applicationTenant.repository';
 import { type Request, type Response } from 'express';
 
 export const GET = async (req: Request, res: Response) => {
-  // const { id } = req.params;
+  const result = await applicationTenantRepository.insert({
+    tenantId: 'ten_0SVUxE0G75Td',
+    applicationId: 'app_qZ85PADchzz9',
+    jsonData: { info: 'qwerty' },
+  });
 
-  // const result = await tenantRepository.findByEmail('asd@mail.com');
-  // await tenantRepository.insert({
-  //   name: 'leanputo',
-  //   email: 'lean@puto.com',
-  // });
-
-  const result = await tenantRepository.getAll();
   return res.json(result);
 };
 

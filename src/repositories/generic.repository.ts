@@ -1,5 +1,9 @@
 import { generateDbId } from '@/utils/generateDbId';
 
+function hasId<T>(obj: T): obj is T & { id: any } {
+  return (obj as any).id !== undefined;
+}
+
 export const createRepository = <T, C, U>(model: any) => ({
   getAll: async (): Promise<T[] | null | undefined> => {
     return model.findMany({
@@ -15,7 +19,7 @@ export const createRepository = <T, C, U>(model: any) => ({
 
   getAllPaginated: async (
     page: number = 1,
-    limit: number = 100,
+    limit: number = 100
   ): Promise<T[] | null | undefined> => {
     return model.findMany({
       omit: {
@@ -51,7 +55,7 @@ export const createRepository = <T, C, U>(model: any) => ({
 
   getByOneField: async (
     field: string,
-    value: string | number | boolean | Date,
+    value: string | number | boolean | Date
   ): Promise<T[] | null | undefined> => {
     if (!field || value === undefined) return;
 
@@ -68,12 +72,18 @@ export const createRepository = <T, C, U>(model: any) => ({
   },
 
   insert: async (element: C): Promise<T | null | undefined> => {
+    const doesId = hasId<C>(element);
+
+    const data: C = doesId
+      ? { ...element, id: generateDbId(model) }
+      : { ...element };
+
     return await model.create({
       omit: {
         isDeleted: true,
         deletedAt: true,
       },
-      data: { ...element, id: generateDbId('tenant') },
+      data,
     });
   },
 

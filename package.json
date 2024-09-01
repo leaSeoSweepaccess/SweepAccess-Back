@@ -8,10 +8,15 @@
     "dev": "tsx watch --clear-screen=false src/server.ts | pino-pretty",
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
-    "test": "jest"
+    "test": "jest",
+    "prisma-migrate": "yarn prisma migrate dev",
+    "prisma-generate": "yarn prisma generate",
+    "prettier:format": "prettier --write .",
+    "prettier:check": "prettier --check .",
+    "prepare": "husky"
   },
   "dependencies": {
-    "@prisma/client": "^5.18.0",
+    "@prisma/client": "^5.19.0",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
     "@types/nanoid": "^3.0.0",
@@ -26,7 +31,7 @@
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.0.7",
     "pino": "^9.3.2",
-    "prisma": "^5.18.0",
+    "prisma": "^5.19.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "zod": "^3.23.8"

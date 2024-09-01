@@ -1,10 +1,11 @@
 import db from '@/db/dbClient';
-import { createRepository } from '../genericRepository';
+import { createRepository } from './generic.repository';
 import { Tenant } from '@prisma/client';
-import { TenantCreate, TenantUpdate } from '@/types/tenantTypes';
+import { TenantCreate } from '@/types/tenant/tenantCreate.type';
+import { TenantUpdate } from '@/types/tenant/tenantUpdate.type';
 
 const baseRepository = createRepository<Tenant, TenantCreate, TenantUpdate>(
-  db.tenant,
+  db.tenant
 );
 
 export const tenantRepository = {

@@ -1,16 +1,21 @@
 model Collaborator {
-  id        String    @id
-  Tenant    Tenant?   @relation(fields: [tenantId], references: [id])
-  tenantId  String
+  id        String  @id
   /// @zod.email()
-  email     String    @unique
+  email     String  @unique
   username  String?
   firstName String?
   lastName  String?
   /// @zod.url()
   avatar    String?
+
   isDeleted Boolean   @default(false)
-  createAt  DateTime? @default(now())
-  updateAt  DateTime? @updatedAt
+  createdAt DateTime? @default(now())
+  createdBy String?
+  updatedAt DateTime? @updatedAt
+  updatedBy String?
   deletedAt DateTime?
+  deletedBy String?
+
+  ApplicationCollaborator ApplicationCollaborator[]
+  CollaboratorTenant      CollaboratorTenant[]
 }

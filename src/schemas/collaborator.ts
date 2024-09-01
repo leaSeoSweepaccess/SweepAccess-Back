@@ -1,22 +1,25 @@
 import * as z from "zod"
-import { CompleteTenant, relatedTenantSchema } from "./index"
+import { CompleteApplicationCollaborator, relatedApplicationCollaboratorSchema, CompleteCollaboratorTenant, relatedCollaboratorTenantSchema } from "./index"
 
 export const collaboratorSchema = z.object({
   id: z.string(),
-  tenantId: z.string(),
   email: z.string().email(),
   username: z.string().nullish(),
   firstName: z.string().nullish(),
   lastName: z.string().nullish(),
   avatar: z.string().url().nullish(),
   isDeleted: z.boolean(),
-  createAt: z.date().nullish(),
-  updateAt: z.date().nullish(),
+  createdAt: z.date().nullish(),
+  createdBy: z.string().nullish(),
+  updatedAt: z.date().nullish(),
+  updatedBy: z.string().nullish(),
   deletedAt: z.date().nullish(),
+  deletedBy: z.string().nullish(),
 })
 
 export interface CompleteCollaborator extends z.infer<typeof collaboratorSchema> {
-  Tenant?: CompleteTenant | null
+  ApplicationCollaborator: CompleteApplicationCollaborator[]
+  CollaboratorTenant: CompleteCollaboratorTenant[]
 }
 
 /**
@@ -25,5 +28,6 @@ export interface CompleteCollaborator extends z.infer<typeof collaboratorSchema>
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const relatedCollaboratorSchema: z.ZodSchema<CompleteCollaborator> = z.lazy(() => collaboratorSchema.extend({
-  Tenant: relatedTenantSchema.nullish(),
+  ApplicationCollaborator: relatedApplicationCollaboratorSchema.array(),
+  CollaboratorTenant: relatedCollaboratorTenantSchema.array(),
 }))
