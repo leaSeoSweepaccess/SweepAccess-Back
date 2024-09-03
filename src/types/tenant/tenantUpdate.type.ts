@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { tenantSchema } from '@/schemas/tenant';
 
-const tenantUpdateSchema = tenantSchema
+export const tenantUpdateSchema = tenantSchema
   .omit({
     isDeleted: true,
     createdAt: true,
@@ -11,9 +11,6 @@ const tenantUpdateSchema = tenantSchema
     deletedAt: true,
     deletedBy: true,
   })
-  .partial()
-  .required({
-    id: true,
-  });
+  .partial();
 
 export type TenantUpdate = z.infer<typeof tenantUpdateSchema>;

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { tenantSchema } from '@/schemas/tenant';
 
-const tenantCreateSchema = tenantSchema
+export const tenantCreateSchema = tenantSchema
   .omit({
     id: true,
     isDeleted: true,
