@@ -1,10 +1,12 @@
 import { Router, type Express } from 'express';
 
+import applicationRoutes from '@/routes/applicationRoutes';
 import tenantRoutes from '@/routes/tenantRoutes';
 
 const loadRoutes = (app: Express) => {
   const apiRouterV1 = Router();
 
+  apiRouterV1.use('/applications', applicationRoutes);
   apiRouterV1.use('/tenants', tenantRoutes);
 
   app.use('/api/v1', apiRouterV1);

@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { applicationSchema } from '@/schemas/application';
 
-const applicationCreateSchema = applicationSchema
+export const applicationCreateSchema = applicationSchema
   .omit({
     id: true,
     isDeleted: true,
-    createAt: true,
+    createdAt: true,
     createdBy: true,
-    updateAt: true,
+    updatedAt: true,
     updatedBy: true,
     deletedAt: true,
     deletedBy: true,
