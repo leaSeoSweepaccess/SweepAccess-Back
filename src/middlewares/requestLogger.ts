@@ -5,7 +5,7 @@
 // import type { LevelWithSilent } from 'pino';
 // import { type CustomAttributeKeys, type Options, pinoHttp } from 'pino-http';
 
-// import env from '@/config';
+// import env from '@/config/env';
 
 // enum LogLevel {
 //   Fatal = 'fatal',

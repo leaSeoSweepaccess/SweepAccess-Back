@@ -3,14 +3,11 @@ import express, { type Express } from 'express';
 import helmet from 'helmet';
 
 import db from '@/db/dbClient';
-import env from '@/config';
+import env from '@/config/env';
 import logger from '@/logger';
 import rateLimiter from '@/middlewares/rateLimiter';
-
 import loadRoutes from '@/utils/loadRoutes';
 
-// import authRoutes from './routes/authRoutes';
-// import userRoutes from './routes/userRoutes';
 // import { errorHandler } from './middlewares/errorHandler';
 
 // To create DB singleton
@@ -37,5 +34,8 @@ loadRoutes(app);
 
 // Error Handler
 // app.use(errorHandler);
+
+// Not Supported Handler
+// TODO: Add NotSupportedHandler
 
 export default app;

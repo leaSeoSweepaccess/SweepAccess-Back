@@ -1,5 +1,5 @@
 import { ENTITIES } from '@/constants/entities';
-import env from '@/config';
+import env from '@/config/env';
 import { customAlphabet } from './nanoId';
 
 const generateUniqueId = (

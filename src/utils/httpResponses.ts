@@ -52,7 +52,7 @@ export function createdResponse<T>(res: Response, data?: T) {
  * There is no content to send for this request, but the headers may be useful.
  */
 export function noContentResponse(res: Response) {
-  return res.status(204).send(); // 204 No Content should not send a JSON response body
+  return sendResponse(res, 204, true); // 204 No Content should not send a JSON response body
 }
 
 /**

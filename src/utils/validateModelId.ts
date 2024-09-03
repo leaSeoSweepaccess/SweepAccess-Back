@@ -1,15 +1,17 @@
-import env from '@/config';
+import env from '@/config/env';
 import { ENTITIES } from '@/constants/entities';
 
 export const genericValidateId = (model: string, id: string) => {
-  const capitalized =
-    model.charAt(0).toUpperCase() + model.slice(1).toLowerCase();
-  const errorMessage = `Invalid ${capitalized} ID "${id}"`;
   const [prefix, code] = id?.split('_');
 
-  if (!id) throw errorMessage;
+  let success = true;
 
-  if (prefix !== ENTITIES[model]?.prefix) throw errorMessage;
+  if (!id) success = false;
 
-  if (code?.length !== env.DB_ID_LENGTH) throw errorMessage;
+  if (prefix !== ENTITIES[model.toLowerCase()]?.prefix) success = false;
+
+  if (code?.length !== env.DB_ID_LENGTH) success = false;
+
+  console.log('validateId', success)
+  return { success };
 };
