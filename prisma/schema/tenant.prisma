@@ -7,7 +7,7 @@ model Tenant {
   /// @zod.url()
   avatar      String?
   /// @zod.email()
-  email       String? @unique
+  email       String  @unique
 
   isDeleted Boolean   @default(false)
   createdAt DateTime? @default(now())
