@@ -4,13 +4,16 @@ function hasId<T>(obj: T): obj is T & { id: any } {
   return (obj as any).id !== undefined;
 }
 
+const genericOmit = {
+  isDeleted: true,
+  deletedAt: true,
+  deletedBy: true,
+};
+
 export const createRepository = <T, C, U>(model: any) => ({
   getAll: async (): Promise<T[] | null | undefined> => {
     return model.findMany({
-      omit: {
-        isDeleted: true,
-        deletedAt: true,
-      },
+      omit: genericOmit,
       where: {
         isDeleted: false,
       },
@@ -22,10 +25,7 @@ export const createRepository = <T, C, U>(model: any) => ({
     limit: number = 100
   ): Promise<T[] | null | undefined> => {
     return model.findMany({
-      omit: {
-        isDeleted: true,
-        deletedAt: true,
-      },
+      omit: genericOmit,
       skip: (page - 1) * limit,
       take: limit,
       where: {
@@ -45,10 +45,7 @@ export const createRepository = <T, C, U>(model: any) => ({
   getById: async (id: string): Promise<T | null | undefined> => {
     if (!id) return null;
     return model.findUnique({
-      omit: {
-        isDeleted: true,
-        deletedAt: true,
-      },
+      omit: genericOmit,
       where: { id, isDeleted: false },
     });
   },
@@ -60,10 +57,7 @@ export const createRepository = <T, C, U>(model: any) => ({
     if (!field || value === undefined) return;
 
     return model.findMany({
-      omit: {
-        isDeleted: true,
-        deletedAt: true,
-      },
+      omit: genericOmit,
       where: {
         [field]: value,
         isDeleted: false,
@@ -71,43 +65,45 @@ export const createRepository = <T, C, U>(model: any) => ({
     });
   },
 
-  insert: async (element: C): Promise<T | null | undefined> => {
+  insert: async (
+    element: C,
+    userId?: string
+  ): Promise<T | null | undefined> => {
     const doesId = hasId<C>(element);
 
-    const data: C = doesId
-      ? { ...element, id: generateDbId(model) }
-      : { ...element };
+    const data: C = !doesId
+      ? { ...element, createdBy: userId ?? 'system', id: generateDbId(model) }
+      : { ...element, createdBy: userId ?? 'system' };
 
     return await model.create({
-      omit: {
-        isDeleted: true,
-        deletedAt: true,
-      },
+      omit: genericOmit,
       data,
     });
   },
 
-  update: async (id: string, element: U): Promise<T | null | undefined> => {
+  update: async (
+    id: string,
+    element: U,
+    userId?: string
+  ): Promise<T | null | undefined> => {
     return model.update({
-      omit: {
-        isDeleted: true,
-        deletedAt: true,
-      },
+      omit: genericOmit,
       where: { id, isDeleted: false },
-      data: { ...element },
+      data: { ...element, updatedBy: userId ?? 'system' },
     });
   },
 
-  delete: async (id: string): Promise<T | null | undefined> => {
+  delete: async (
+    id: string,
+    userId?: string
+  ): Promise<T | null | undefined> => {
     return model.update({
-      omit: {
-        isDeleted: true,
-        deletedAt: true,
-      },
+      omit: genericOmit,
       where: { id, isDeleted: false },
       data: {
         isDeleted: true,
         deletedAt: new Date(),
+        deletedBy: userId ?? 'system',
       },
     });
   },

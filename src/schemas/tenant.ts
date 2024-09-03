@@ -7,7 +7,7 @@ export const tenantSchema = z.object({
   description: z.string().nullish(),
   url: z.string().url().nullish(),
   avatar: z.string().url().nullish(),
-  email: z.string().email().nullish(),
+  email: z.string().email(),
   isDeleted: z.boolean(),
   createdAt: z.date().nullish(),
   createdBy: z.string().nullish(),

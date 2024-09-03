@@ -16,5 +16,5 @@ import { successResponse } from '@/utils/httpResponses';
 // });
 
 export const GET = (_req: Request, res: Response) => {
-  return successResponse('Healthy 👍🏻', res);
+  return successResponse(res, 'Healthy 👍🏻');
 };
