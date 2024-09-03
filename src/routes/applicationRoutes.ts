@@ -19,7 +19,11 @@ const router = Router();
 router.get('/', applicationController.getAll);
 
 // Create a Applications
-router.post('/', validateRequest(applicationCreateSchema), applicationController.create);
+router.post(
+  '/',
+  validateRequest(applicationCreateSchema),
+  applicationController.create,
+);
 
 // Get a Application by ID
 router.get(
