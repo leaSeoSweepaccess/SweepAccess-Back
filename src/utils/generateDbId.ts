@@ -4,7 +4,7 @@ import { customAlphabet } from './nanoId';
 
 const generateUniqueId = (
   alphabet = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  size = env.DB_ID_LENGTH
+  size = env.DB_ID_LENGTH,
 ): string => {
   return customAlphabet(alphabet, size)();
 };

@@ -13,7 +13,7 @@ const onCloseSignal = () => {
 
   server.close(() => {
     logger.info('server closed');
-    
+
     process.exit();
   });
 

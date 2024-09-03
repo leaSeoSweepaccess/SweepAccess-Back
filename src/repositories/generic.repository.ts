@@ -22,7 +22,7 @@ export const createRepository = <T, C, U>(model: any) => ({
 
   getAllPaginated: async (
     page: number = 1,
-    limit: number = 100
+    limit: number = 100,
   ): Promise<T[] | null | undefined> => {
     return model.findMany({
       omit: genericOmit,
@@ -52,7 +52,7 @@ export const createRepository = <T, C, U>(model: any) => ({
 
   getByOneField: async (
     field: string,
-    value: string | number | boolean | Date
+    value: string | number | boolean | Date,
   ): Promise<T[] | null | undefined> => {
     if (!field || value === undefined) return;
 
@@ -67,7 +67,7 @@ export const createRepository = <T, C, U>(model: any) => ({
 
   insert: async (
     element: C,
-    userId?: string
+    userId?: string,
   ): Promise<T | null | undefined> => {
     const doesId = hasId<C>(element);
 
@@ -84,7 +84,7 @@ export const createRepository = <T, C, U>(model: any) => ({
   update: async (
     id: string,
     element: U,
-    userId?: string
+    userId?: string,
   ): Promise<T | null | undefined> => {
     return model.update({
       omit: genericOmit,
@@ -95,7 +95,7 @@ export const createRepository = <T, C, U>(model: any) => ({
 
   delete: async (
     id: string,
-    userId?: string
+    userId?: string,
   ): Promise<T | null | undefined> => {
     return model.update({
       omit: genericOmit,

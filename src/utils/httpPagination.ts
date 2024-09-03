@@ -2,7 +2,7 @@ import { PaginationInput, PaginationMeta } from '@/types/paginationMeta';
 
 export const pagination = {
   getPageAndLimit: (
-    searchParams: PaginationInput
+    searchParams: PaginationInput,
   ): { page: number; limit: number } => {
     const { page = 1, limit = 100 } = searchParams;
 
@@ -15,7 +15,7 @@ export const pagination = {
   createMeta: (
     page: number = 0,
     limit: number = 0,
-    total: number = 0
+    total: number = 0,
   ): PaginationMeta => {
     return {
       total: total ?? 0,

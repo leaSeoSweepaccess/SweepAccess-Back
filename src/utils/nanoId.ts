@@ -1,4 +1,4 @@
-import { webcrypto as crypto } from 'node:crypto'
+import { webcrypto as crypto } from 'node:crypto';
 
 const POOL_SIZE_MULTIPLIER = 128;
 let pool: any, poolOffset: any;

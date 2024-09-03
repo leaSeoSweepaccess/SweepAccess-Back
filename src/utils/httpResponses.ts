@@ -10,7 +10,7 @@ function sendResponse<T>(
   success: boolean,
   data?: T,
   error?: string | any,
-  meta?: PaginationMeta
+  meta?: PaginationMeta,
 ) {
   const responseBody = {
     status,
@@ -36,7 +36,7 @@ export function successResponse<T>(res: Response, data?: T) {
 export function successPaginatedResponse<T>(
   res: Response,
   data: T,
-  meta?: PaginationMeta
+  meta?: PaginationMeta,
 ) {
   return sendResponse(res, 200, true, data, undefined, meta);
 }
@@ -88,7 +88,7 @@ export function notFoundResponse(res: Response, error: any = 'Data not found') {
  */
 export function methodNotAllowedResponse(
   res: Response,
-  error = 'Method not allowed'
+  error = 'Method not allowed',
 ) {
   return sendResponse(res, 405, false, undefined, error);
 }
@@ -98,7 +98,7 @@ export function methodNotAllowedResponse(
  */
 export function internalServerErrorResponse(
   res: Response,
-  error = 'Internal server error'
+  error = 'Internal server error',
 ) {
   return sendResponse(res, 500, false, undefined, error);
 }

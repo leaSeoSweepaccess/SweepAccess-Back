@@ -25,7 +25,7 @@ router.post('/', validateRequest(tenantCreateSchema), tenantController.create);
 router.get(
   '/:tenantId',
   validateParamsId('tenantId'),
-  tenantController.getById
+  tenantController.getById,
 );
 
 // Update a Tenant by ID
@@ -33,14 +33,14 @@ router.put(
   '/:tenantId',
   validateRequest(tenantUpdateSchema),
   validateParamsId('tenantId'),
-  tenantController.update
+  tenantController.update,
 );
 
 // Delete a Tenant by ID
 router.delete(
   '/:tenantId',
   validateParamsId('tenantId'),
-  tenantController.delete
+  tenantController.delete,
 );
 
 export default router;

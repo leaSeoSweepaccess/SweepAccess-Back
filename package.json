@@ -7,7 +7,7 @@
     "start": "tsc && node dist/server.js",
     "dev": "tsx watch --clear-screen=false src/server.ts | pino-pretty",
     "build": "tsc",
-    "lint": "eslint 'src/**/*.ts'",
+    "lint": "eslint",
     "test": "jest",
     "prisma-migrate": "yarn prisma migrate dev",
     "prisma-generate": "yarn prisma generate",

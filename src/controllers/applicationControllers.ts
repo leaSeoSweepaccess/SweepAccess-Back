@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
-import { Tenant } from '@prisma/client';
-import { tenantRepository } from '@/repositories/tenantRepository';
-import { tenantService } from '@/services/tenantService';
+import { Application } from '@prisma/client';
+import { applicationRepository } from '@/repositories/applicationRepository';
 import { PaginationInput } from '@/types/paginationMeta';
 import {
   badRequestResponse,
@@ -12,20 +11,17 @@ import {
 } from '@/utils/httpResponses';
 import { pagination } from '@/utils/httpPagination';
 
-const modelName = 'Tenant';
+const modelName = 'Application';
 
-export const tenantController = {
+export const applicationController = {
   create: async (req: Request, res: Response) => {
     try {
       const { body } = req;
 
-      const doesEmailExist = await tenantService.checkEmailExists(body.email);
-      if (doesEmailExist) throw 'Email already taken';
-
-      const result = await tenantRepository.insert(body);
+      const result = await applicationRepository.insert(body);
       if (!result) throw `${modelName} not inserted`;
 
-      return createdResponse<Tenant>(res, result);
+      return createdResponse<Application>(res, result);
     } catch (error) {
       return badRequestResponse(res, error);
     }
@@ -33,27 +29,20 @@ export const tenantController = {
 
   update: async (req: Request, res: Response) => {
     try {
-      const { tenantId } = req.params;
+      const { applicationId } = req.params;
       const { body } = req;
-      const email = body;
 
-      const original = await tenantRepository.getById(tenantId);
+      const original = await applicationRepository.getById(applicationId);
       if (!original) throw `${modelName} not found`;
 
-      // if email has changed, validate new one is not taken
-      if (email && email !== original.email) {
-        const doesEmailExist = await tenantService.checkEmailExists(email);
-        if (doesEmailExist) throw 'Email already taken';
-      }
-
-      const updateResult = await tenantRepository.update(tenantId, {
+      const updateResult = await applicationRepository.update(applicationId, {
         ...original,
         ...body,
       });
 
       if (!updateResult) throw `${modelName} not updated`;
 
-      return successResponse<Tenant>(res, updateResult);
+      return successResponse<Application>(res, updateResult);
     } catch (error) {
       return badRequestResponse(res, error);
     }
@@ -61,12 +50,12 @@ export const tenantController = {
 
   delete: async (req: Request, res: Response) => {
     try {
-      const { tenantId } = req.params;
+      const { applicationId } = req.params;
 
-      const original = await tenantRepository.getById(tenantId);
+      const original = await applicationRepository.getById(applicationId);
       if (!original) throw `Not found ${modelName} ID`;
 
-      await tenantRepository.delete(tenantId);
+      await applicationRepository.delete(applicationId);
 
       return noContentResponse(res);
     } catch (error) {
@@ -80,8 +69,8 @@ export const tenantController = {
       const { page, limit } = pagination.getPageAndLimit(searchParams);
 
       const [data, total] = await Promise.all([
-        tenantRepository.getAllPaginated(page, limit),
-        tenantRepository.getAllTotal(),
+        applicationRepository.getAllPaginated(page, limit),
+        applicationRepository.getAllTotal(),
       ]);
 
       if (!data?.length || !total) {
@@ -90,7 +79,7 @@ export const tenantController = {
 
       const meta = pagination.createMeta(page, limit, total);
 
-      return successPaginatedResponse<Tenant[]>(res, data, meta);
+      return successPaginatedResponse<Application[]>(res, data, meta);
     } catch (error) {
       return badRequestResponse(res, error);
     }
@@ -98,12 +87,12 @@ export const tenantController = {
 
   getById: async (req: Request, res: Response) => {
     try {
-      const { tenantId } = req.params;
+      const { applicationId } = req.params;
 
-      const data = await tenantRepository.getById(tenantId);
+      const data = await applicationRepository.getById(applicationId);
       if (!data) throw `Not found ${modelName} ID`;
 
-      return successResponse<Tenant>(res, data);
+      return successResponse<Application>(res, data);
     } catch (error) {
       return badRequestResponse(res, error);
     }
