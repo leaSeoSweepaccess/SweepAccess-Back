@@ -2,11 +2,11 @@ import cors from 'cors';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
 
-import db from '@/db/dbClient';
+import db from '@/config/dbClient';
 import env from '@/config/env';
 import logger from '@/logger';
 import rateLimiter from '@/middlewares/rateLimiter';
-import loadRoutes from '@/utils/loadRoutes';
+import loadRoutes from '@/config/loadRoutes';
 
 // import { errorHandler } from './middlewares/errorHandler';
 
