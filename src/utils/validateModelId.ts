@@ -12,6 +12,5 @@ export const genericValidateId = (model: string, id: string) => {
 
   if (code?.length !== env.DB_ID_LENGTH) success = false;
 
-  console.log('validateId', success);
   return { success };
 };

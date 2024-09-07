@@ -1,4 +1,4 @@
-import db from '@/db/dbClient';
+import db from '@/config/dbClient';
 import { createRepository } from './generic.repository';
 import { ApplicationCollaborator } from '@prisma/client';
 import { ApplicationCollaboratorCreate } from '@/types/applicationCollaborator/applicationCollaboratorCreate.type';

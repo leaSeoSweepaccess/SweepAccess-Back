@@ -1,4 +1,4 @@
-import db from '@/db/dbClient';
+import db from '@/config/dbClient';
 import { createRepository } from './generic.repository';
 import { Tenant } from '@prisma/client';
 import { TenantCreate } from '@/types/tenant/tenantCreate.type';
@@ -11,7 +11,7 @@ const baseRepository = createRepository<Tenant, TenantCreate, TenantUpdate>(
 export const tenantRepository = {
   ...baseRepository,
 
-  async findByEmail(email: string) {
+  async getByEmail(email: string) {
     return await db.tenant.findUnique({
       where: { email },
     });

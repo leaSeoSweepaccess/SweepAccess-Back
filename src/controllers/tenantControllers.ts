@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { Tenant } from '@prisma/client';
-import { tenantRepository } from '@/repositories/tenantRepository';
-import { tenantService } from '@/services/tenantService';
+import { tenantRepository as repository } from '@/repositories/tenantRepository';
+import { tenantService as service } from '@/services/tenantService';
 import { PaginationInput } from '@/types/paginationMeta';
 import {
   badRequestResponse,
@@ -19,10 +19,10 @@ export const tenantController = {
     try {
       const { body } = req;
 
-      const doesEmailExist = await tenantService.checkEmailExists(body.email);
+      const doesEmailExist = await service.checkEmailExists(body.email);
       if (doesEmailExist) throw 'Email already taken';
 
-      const result = await tenantRepository.insert(body);
+      const result = await repository.insert(body);
       if (!result) throw `${modelName} not inserted`;
 
       return createdResponse<Tenant>(res, result);
@@ -37,16 +37,16 @@ export const tenantController = {
       const { body } = req;
       const email = body;
 
-      const original = await tenantRepository.getById(tenantId);
+      const original = await repository.getById(tenantId);
       if (!original) throw `${modelName} not found`;
 
       // if email has changed, validate new one is not taken
       if (email && email !== original.email) {
-        const doesEmailExist = await tenantService.checkEmailExists(email);
+        const doesEmailExist = await service.checkEmailExists(email);
         if (doesEmailExist) throw 'Email already taken';
       }
 
-      const updateResult = await tenantRepository.update(tenantId, {
+      const updateResult = await repository.update(tenantId, {
         ...original,
         ...body,
       });
@@ -63,10 +63,10 @@ export const tenantController = {
     try {
       const { tenantId } = req.params;
 
-      const original = await tenantRepository.getById(tenantId);
+      const original = await repository.getById(tenantId);
       if (!original) throw `Not found ${modelName} ID`;
 
-      await tenantRepository.delete(tenantId);
+      await repository.delete(tenantId);
 
       return noContentResponse(res);
     } catch (error) {
@@ -80,8 +80,8 @@ export const tenantController = {
       const { page, limit } = pagination.getPageAndLimit(searchParams);
 
       const [data, total] = await Promise.all([
-        tenantRepository.getAllPaginated(page, limit),
-        tenantRepository.getAllTotal(),
+        repository.getAllPaginated(page, limit),
+        repository.getAllTotal(),
       ]);
 
       if (!data?.length || !total) {
@@ -100,7 +100,7 @@ export const tenantController = {
     try {
       const { tenantId } = req.params;
 
-      const data = await tenantRepository.getById(tenantId);
+      const data = await repository.getById(tenantId);
       if (!data) throw `Not found ${modelName} ID`;
 
       return successResponse<Tenant>(res, data);

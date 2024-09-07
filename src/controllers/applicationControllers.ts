@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Application } from '@prisma/client';
-import { applicationRepository } from '@/repositories/applicationRepository';
+import { applicationRepository as repository } from '@/repositories/applicationRepository';
 import { PaginationInput } from '@/types/paginationMeta';
 import {
   badRequestResponse,
@@ -18,7 +18,7 @@ export const applicationController = {
     try {
       const { body } = req;
 
-      const result = await applicationRepository.insert(body);
+      const result = await repository.insert(body);
       if (!result) throw `${modelName} not inserted`;
 
       return createdResponse<Application>(res, result);
@@ -32,10 +32,10 @@ export const applicationController = {
       const { applicationId } = req.params;
       const { body } = req;
 
-      const original = await applicationRepository.getById(applicationId);
+      const original = await repository.getById(applicationId);
       if (!original) throw `${modelName} not found`;
 
-      const updateResult = await applicationRepository.update(applicationId, {
+      const updateResult = await repository.update(applicationId, {
         ...original,
         ...body,
       });
@@ -52,10 +52,10 @@ export const applicationController = {
     try {
       const { applicationId } = req.params;
 
-      const original = await applicationRepository.getById(applicationId);
+      const original = await repository.getById(applicationId);
       if (!original) throw `Not found ${modelName} ID`;
 
-      await applicationRepository.delete(applicationId);
+      await repository.delete(applicationId);
 
       return noContentResponse(res);
     } catch (error) {
@@ -69,8 +69,8 @@ export const applicationController = {
       const { page, limit } = pagination.getPageAndLimit(searchParams);
 
       const [data, total] = await Promise.all([
-        applicationRepository.getAllPaginated(page, limit),
-        applicationRepository.getAllTotal(),
+        repository.getAllPaginated(page, limit),
+        repository.getAllTotal(),
       ]);
 
       if (!data?.length || !total) {
@@ -89,7 +89,7 @@ export const applicationController = {
     try {
       const { applicationId } = req.params;
 
-      const data = await applicationRepository.getById(applicationId);
+      const data = await repository.getById(applicationId);
       if (!data) throw `Not found ${modelName} ID`;
 
       return successResponse<Application>(res, data);
