@@ -1,4 +1,4 @@
-import { tenantRepository } from '@/repositories/tenantRepository';
+import { tenantRepository } from '@/repositories/tenant.repository';
 
 export const tenantService = {
   checkEmailExists: async (email: string) => {
