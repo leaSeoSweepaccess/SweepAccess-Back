@@ -17,7 +17,7 @@ model Tenant {
   deletedAt DateTime?
   deletedBy String?
 
-  ApplicationTenant       ApplicationTenant[]
-  CollaboratorTenant      CollaboratorTenant[]
-  ApplicationCollaborator ApplicationCollaborator[]
+  ApplicationCollaboratorTenant ApplicationCollaboratorTenant[]
+  ApplicationTenant             ApplicationTenant[]
+  CollaboratorTenant            CollaboratorTenant[]
 }

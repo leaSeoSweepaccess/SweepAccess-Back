@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { CompleteApplicationTenant, relatedApplicationTenantSchema, CompleteCollaboratorTenant, relatedCollaboratorTenantSchema, CompleteApplicationCollaborator, relatedApplicationCollaboratorSchema } from "./index"
+import { CompleteApplicationCollaboratorTenant, relatedApplicationCollaboratorTenantSchema, CompleteApplicationTenant, relatedApplicationTenantSchema, CompleteCollaboratorTenant, relatedCollaboratorTenantSchema } from "./index"
 
 export const tenantSchema = z.object({
   id: z.string(),
@@ -18,9 +18,9 @@ export const tenantSchema = z.object({
 })
 
 export interface CompleteTenant extends z.infer<typeof tenantSchema> {
+  ApplicationCollaboratorTenant: CompleteApplicationCollaboratorTenant[]
   ApplicationTenant: CompleteApplicationTenant[]
   CollaboratorTenant: CompleteCollaboratorTenant[]
-  ApplicationCollaborator: CompleteApplicationCollaborator[]
 }
 
 /**
@@ -29,7 +29,7 @@ export interface CompleteTenant extends z.infer<typeof tenantSchema> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const relatedTenantSchema: z.ZodSchema<CompleteTenant> = z.lazy(() => tenantSchema.extend({
+  ApplicationCollaboratorTenant: relatedApplicationCollaboratorTenantSchema.array(),
   ApplicationTenant: relatedApplicationTenantSchema.array(),
   CollaboratorTenant: relatedCollaboratorTenantSchema.array(),
-  ApplicationCollaborator: relatedApplicationCollaboratorSchema.array(),
 }))

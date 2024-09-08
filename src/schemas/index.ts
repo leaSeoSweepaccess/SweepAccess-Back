@@ -1,5 +1,5 @@
 export * from "./application"
-export * from "./applicationcollaborator"
+export * from "./applicationcollaboratortenant"
 export * from "./applicationtenant"
 export * from "./collaborator"
 export * from "./collaboratortenant"

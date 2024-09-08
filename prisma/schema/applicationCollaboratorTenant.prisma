@@ -1,4 +1,4 @@
-model ApplicationCollaborator {
+model ApplicationCollaboratorTenant {
   Application   Application @relation(fields: [applicationId], references: [id])
   applicationId String
 
