@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { collaboratorSchema } from '@/schemas/collaborator';
 
-const collaboratorCreateSchema = collaboratorSchema
+export const collaboratorCreateSchema = collaboratorSchema
   .omit({
     id: true,
     isDeleted: true,
-    createAt: true,
+    createdAt: true,
     createdBy: true,
-    updateAt: true,
+    updatedAt: true,
     updatedBy: true,
     deletedAt: true,
     deletedBy: true,
