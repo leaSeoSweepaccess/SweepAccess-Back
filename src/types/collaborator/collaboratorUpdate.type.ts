@@ -11,6 +11,6 @@ export const collaboratorUpdateSchema = collaboratorSchema
     deletedAt: true,
     deletedBy: true,
   })
-  .partial()
+  .partial();
 
 export type CollaboratorUpdate = z.infer<typeof collaboratorUpdateSchema>;
