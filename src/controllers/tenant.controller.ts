@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Tenant } from '@prisma/client';
-import { tenantRepository as repository } from '@/repositories/tenantRepository';
+import { tenantRepository as repository } from '@/repositories/tenant.repository';
 import { tenantService as service } from '@/services/tenantService';
 import { PaginationInput } from '@/types/paginationMeta';
 import {

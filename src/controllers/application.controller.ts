@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Application } from '@prisma/client';
-import { applicationRepository as repository } from '@/repositories/applicationRepository';
+import { applicationRepository as repository } from '@/repositories/application.repository';
 import { PaginationInput } from '@/types/paginationMeta';
 import {
   badRequestResponse,
