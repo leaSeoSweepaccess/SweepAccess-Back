@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { applicationTenantSchema } from '@/schemas/applicationtenant';
 
-const applicationTenantCreateSchema = applicationTenantSchema
+export const applicationTenantCreateSchema = applicationTenantSchema
   .omit({
     isDeleted: true,
     createdAt: true,
@@ -13,10 +13,6 @@ const applicationTenantCreateSchema = applicationTenantSchema
   })
   .partial({
     jsonData: true,
-  })
-  .required({
-    applicationId: true,
-    tenantId: true,
   });
 
 export type ApplicationTenantCreate = z.infer<

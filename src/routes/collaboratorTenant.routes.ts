@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import { collaboratorTenantController as controller } from '@/controllers/collaboratorTenant.controller';
-import { validateParamsId } from '@/middlewares/validateRequest';
+import {
+  validateParamsId,
+  validateRequest,
+} from '@/middlewares/validateRequest';
+import { collaboratorTenantUpdateSchema } from '@/types/collaboratorTenant/collaboratorTenantUpdate.type';
+import { collaboratorTenantCreateSchema } from '@/types/collaboratorTenant/collaboratorTenantCreate.type';
 
 const router = Router({ mergeParams: true });
 
@@ -9,14 +14,14 @@ const router = Router({ mergeParams: true });
 
 // TODO: Add authorization by role
 
-// Get all Applications a Tenant paginated
+// Get all Collaborators a Tenant paginated
 router.get(
   '/:tenantId/collaborators',
   validateParamsId('tenantId'),
   controller.getAll,
 );
 
-// Get an Application for a Tenant
+// Get an Collaborator for a Tenant
 router.get(
   '/:tenantId/collaborators/:collaboratorId',
   validateParamsId('tenantId'),
@@ -24,19 +29,21 @@ router.get(
   controller.getById,
 );
 
-// Assign an Application to a Tenant
+// Assign an Collaborator to a Tenant
 router.post(
   '/:tenantId/collaborators/:collaboratorId',
   validateParamsId('tenantId'),
   validateParamsId('collaboratorId'),
+  validateRequest(collaboratorTenantCreateSchema),
   controller.create,
 );
 
-// Update payload of an Application to a Tenant
+// Update payload of an Collaborator to a Tenant
 router.put(
   '/:tenantId/collaborators/:collaboratorId',
   validateParamsId('tenantId'),
   validateParamsId('collaboratorId'),
+  validateRequest(collaboratorTenantUpdateSchema),
   controller.update,
 );
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { collaboratorTenantSchema } from '@/schemas/collaboratortenant';
 
-const collaboratorTenantCreateSchema = collaboratorTenantSchema
+export const collaboratorTenantCreateSchema = collaboratorTenantSchema
   .omit({
     isDeleted: true,
     createdAt: true,
@@ -13,10 +13,6 @@ const collaboratorTenantCreateSchema = collaboratorTenantSchema
   })
   .partial({
     jsonData: true,
-  })
-  .required({
-    collaboratorId: true,
-    tenantId: true,
   });
 
 export type CollaboratorTenantCreate = z.infer<

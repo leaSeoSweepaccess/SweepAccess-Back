@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import { applicationTenantController as controller } from '@/controllers/applicationTenant.controller';
-import { validateParamsId } from '@/middlewares/validateRequest';
+import {
+  validateParamsId,
+  validateRequest,
+} from '@/middlewares/validateRequest';
+import { applicationTenantCreateSchema } from '@/types/applicationTenant/applicationTenantCreate.type';
+import { applicationTenantUpdateSchema } from '@/types/applicationTenant/applicationTenantUpdate.type';
 
 const router = Router({ mergeParams: true });
 
@@ -29,6 +34,7 @@ router.post(
   '/:tenantId/applications/:applicationId',
   validateParamsId('tenantId'),
   validateParamsId('applicationId'),
+  validateRequest(applicationTenantCreateSchema),
   controller.create,
 );
 
@@ -37,6 +43,7 @@ router.put(
   '/:tenantId/applications/:applicationId',
   validateParamsId('tenantId'),
   validateParamsId('applicationId'),
+  validateRequest(applicationTenantUpdateSchema),
   controller.update,
 );
 
