@@ -4,7 +4,7 @@ import {
   validateRequest,
 } from '../middlewares/validateRequest';
 import { tenantCreateSchema } from '@/types/tenant/tenantCreate.type';
-import { tenantController as controller } from '@/controllers/tenantControllers';
+import { tenantController as controller } from '@/controllers/tenant.controller';
 import { tenantUpdateSchema } from '@/types/tenant/tenantUpdate.type';
 // import { validateToken } from '../middlewares/authMiddleware';
 

@@ -1,8 +1,8 @@
 import { Router, type Express } from 'express';
 
-import applicationRoutes from '@/routes/applicationRoutes';
-import applicationTenantRoutes from '@/routes/applicationTenantRoutes';
-import tenantRoutes from '@/routes/tenantRoutes';
+import applicationRoutes from '@/routes/application.routes';
+import applicationTenantRoutes from '@/routes/applicationTenant.routes';
+import tenantRoutes from '@/routes/tenant.routes';
 import githubRoutes from '@/routes/githubRoutes';
 
 const loadRoutes = (app: Express) => {

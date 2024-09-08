@@ -4,7 +4,7 @@ import {
   validateRequest,
 } from '../middlewares/validateRequest';
 import { applicationCreateSchema } from '@/types/application/applicationCreate.type';
-import { applicationController } from '@/controllers/applicationControllers';
+import { applicationController } from '@/controllers/application.controller';
 import { applicationUpdateSchema } from '@/types/application/applicationUpdate.type';
 // import { validateToken } from '../middlewares/authMiddleware';
 

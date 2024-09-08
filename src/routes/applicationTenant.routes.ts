@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { applicationTenantController as controller } from '@/controllers/applicationTenantControllers';
+import { applicationTenantController as controller } from '@/controllers/applicationTenant.controller';
 import { validateParamsId } from '@/middlewares/validateRequest';
 
 const router = Router({ mergeParams: true });
