@@ -5,6 +5,9 @@ model ApplicationCollaborator {
   Collaborator   Collaborator @relation(fields: [collaboratorId], references: [id])
   collaboratorId String
 
+  Tenant   Tenant @relation(fields: [tenantId], references: [id])
+  tenantId String
+
   jsonData Json?
 
   isDeleted Boolean   @default(false)
@@ -15,5 +18,5 @@ model ApplicationCollaborator {
   deletedAt DateTime?
   deletedBy String?
 
-  @@id([applicationId, collaboratorId])
+  @@id([applicationId, collaboratorId, tenantId])
 }

@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { CompleteApplication, relatedApplicationSchema, CompleteCollaborator, relatedCollaboratorSchema } from "./index"
+import { CompleteApplication, relatedApplicationSchema, CompleteCollaborator, relatedCollaboratorSchema, CompleteTenant, relatedTenantSchema } from "./index"
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string
@@ -10,6 +10,7 @@ const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.arr
 export const applicationCollaboratorSchema = z.object({
   applicationId: z.string(),
   collaboratorId: z.string(),
+  tenantId: z.string(),
   jsonData: jsonSchema,
   isDeleted: z.boolean(),
   createdAt: z.date().nullish(),
@@ -23,6 +24,7 @@ export const applicationCollaboratorSchema = z.object({
 export interface CompleteApplicationCollaborator extends z.infer<typeof applicationCollaboratorSchema> {
   Application: CompleteApplication
   Collaborator: CompleteCollaborator
+  Tenant: CompleteTenant
 }
 
 /**
@@ -33,4 +35,5 @@ export interface CompleteApplicationCollaborator extends z.infer<typeof applicat
 export const relatedApplicationCollaboratorSchema: z.ZodSchema<CompleteApplicationCollaborator> = z.lazy(() => applicationCollaboratorSchema.extend({
   Application: relatedApplicationSchema,
   Collaborator: relatedCollaboratorSchema,
+  Tenant: relatedTenantSchema,
 }))
