@@ -223,7 +223,7 @@ export const createMultipleIdRepository = <T, C, U>(model: any) => ({
       const result = await model.updateMany({
         // omit: genericOmit,
         where: { ...Object.assign({}, ...ids), isDeleted: true },
-        data: { ...element, updatedBy: userId ?? 'system' },
+        data: { ...element, updatedBy: userId ?? 'system', isDeleted: false },
       });
 
       return result;
