@@ -2,6 +2,7 @@ import { Router, type Express } from 'express';
 
 import applicationRoutes from '@/routes/application.routes';
 import applicationTenantRoutes from '@/routes/applicationTenant.routes';
+import applicationCollaboratorTenantRoutes from '@/routes/applicationCollaboratorTenant.routes';
 import collaboratorTenantRoutes from '@/routes/collaboratorTenant.routes';
 import collaboratorsRoutes from '@/routes/collaborator.routes';
 import tenantRoutes from '@/routes/tenant.routes';
@@ -16,6 +17,7 @@ const loadRoutes = (app: Express) => {
   apiRouterV1.use('/tenants', tenantRoutes);
   apiRouterV1.use('/tenants', applicationTenantRoutes);
   apiRouterV1.use('/tenants', collaboratorTenantRoutes);
+  apiRouterV1.use('/tenants', applicationCollaboratorTenantRoutes);
 
   // Third-parties
   apiRouterV1.use('/github', githubRoutes);

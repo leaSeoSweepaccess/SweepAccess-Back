@@ -201,17 +201,11 @@ export const createMultipleIdRepository = <T, C, U>(model: any) => ({
     element: U,
     userId?: string,
   ): Promise<T | null | undefined> => {
-    try {
-      const result = await model.updateMany({
-        // omit: genericOmit,
-        where: { ...Object.assign({}, ...ids), isDeleted: false },
-        data: { ...element, updatedBy: userId ?? 'system' },
-      });
-
-      return result;
-    } catch (error) {
-      console.log('error', error);
-    }
+    return await model.updateMany({
+      // omit: genericOmit,
+      where: { ...Object.assign({}, ...ids), isDeleted: false },
+      data: { ...element, updatedBy: userId ?? 'system' },
+    });
   },
 
   updateDeleted: async (
@@ -222,8 +216,17 @@ export const createMultipleIdRepository = <T, C, U>(model: any) => ({
     try {
       const result = await model.updateMany({
         // omit: genericOmit,
-        where: { ...Object.assign({}, ...ids), isDeleted: true },
-        data: { ...element, updatedBy: userId ?? 'system', isDeleted: false },
+        where: {
+          ...Object.assign({}, ...ids),
+          isDeleted: true,
+          deletedAt: null,
+        },
+        data: {
+          ...element,
+          updatedBy: userId ?? 'system',
+          isDeleted: false,
+          deletedAt: null,
+        },
       });
 
       return result;

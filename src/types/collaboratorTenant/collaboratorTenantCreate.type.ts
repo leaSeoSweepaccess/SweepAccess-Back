@@ -11,9 +11,7 @@ export const collaboratorTenantCreateSchema = collaboratorTenantSchema
     deletedAt: true,
     deletedBy: true,
   })
-  .partial({
-    jsonData: true,
-  });
+  .partial();
 
 export type CollaboratorTenantCreate = z.infer<
   typeof collaboratorTenantCreateSchema
