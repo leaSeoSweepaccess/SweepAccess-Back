@@ -1,6 +1,6 @@
 import axios from 'axios';
 import logger from '@/logger';
-import * as githubConnector from './github.connector';
+import * as githubConnector from '@/integrations/github/github.connector';
 import env from '@/config/env';
 
 enum Role {

@@ -7,6 +7,7 @@ import collaboratorTenantRoutes from '@/routes/collaboratorTenant.routes';
 import collaboratorsRoutes from '@/routes/collaborator.routes';
 import tenantRoutes from '@/routes/tenant.routes';
 import githubRoutes from '@/routes/githubRoutes';
+import slackRoutes from '@/routes/slack.routes';
 
 const loadRoutes = (app: Express) => {
   const apiRouterV1 = Router();
@@ -21,6 +22,7 @@ const loadRoutes = (app: Express) => {
 
   // Third-parties
   apiRouterV1.use('/github', githubRoutes);
+  apiRouterV1.use('/slack', slackRoutes);
 
   app.use('/api/v1', apiRouterV1);
 };

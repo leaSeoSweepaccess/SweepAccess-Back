@@ -4,14 +4,14 @@ import { githubModel } from '@/integrations/github/github.model';
 const modelName = 'Github';
 
 export const githubController = {
-  authorizationCallback: (req: Request, res: Response) => {
+  authorizationCallback: async (req: Request, res: Response) => {
     const { code } = req.query;
 
     if (!code) {
       return res.status(400).send('Missing code parameter');
     }
 
-    const accessToken = githubModel.getAccessToken(code as string);
+    const accessToken = await githubModel.getAccessToken(code as string);
 
     //ACA DEBERIAMOS GUARDAR El ACCESS TOKEN RELACIONANDOLO CON EL TENANT
     // Y CON LA APPLICATION
@@ -21,8 +21,8 @@ export const githubController = {
     });
   },
 
-  createSignupUrl: async (req: Request, res: Response) => {
-    const redirectUri = await githubModel.createSignupUrlCallback();
+  createSignupUrl: (req: Request, res: Response) => {
+    const redirectUri = githubModel.createSignupUrlCallback();
 
     res.json({
       redirectUri,
