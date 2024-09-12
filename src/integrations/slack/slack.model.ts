@@ -39,7 +39,7 @@ export const slackModel = {
             Accept: 'application/json',
           },
         },
-      )
+      );
 
       return response.data;
     } catch (error) {
@@ -67,5 +67,5 @@ export const slackModel = {
   },
   getTeamList: async (slackToken: string) => {
     return slackConnector.get(slackToken, 'api/team.info');
-  }
-}
+  },
+};
