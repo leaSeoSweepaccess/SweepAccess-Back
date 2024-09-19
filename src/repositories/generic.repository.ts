@@ -56,6 +56,7 @@ export const createRepository = <T, C, U>(model: any) => ({
   getByOneField: async (
     field: string,
     value: string | number | boolean | Date,
+    isDeleted = false,
   ): Promise<T[] | null | undefined> => {
     if (!field || value === undefined) return;
 
@@ -63,7 +64,7 @@ export const createRepository = <T, C, U>(model: any) => ({
       omit: genericOmit,
       where: {
         [field]: value,
-        isDeleted: false,
+        isDeleted,
       },
     });
   },
