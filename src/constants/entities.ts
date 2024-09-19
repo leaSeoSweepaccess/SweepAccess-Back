@@ -11,4 +11,8 @@ export const ENTITIES: { [key: string]: { name: string; prefix: string } } = {
     name: 'Collaborator',
     prefix: 'col',
   },
+  user: {
+    name: 'User',
+    prefix: 'usr',
+  },
 };

@@ -6,7 +6,7 @@ export const userSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),
-  password: z.string().nullish(),
+  password: z.string().min(8, { message: "Password must be at least 8 characters long" }).max(20, { message: "Password cannot exceed 20 characters" }).regex(/\d/, { message: "Password must contain at least one number" }).regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" }).regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" }).regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" }).nullish(),
   isEmailVerified: z.boolean(),
   emailVerificationCode: z.string().nullish(),
   isDeleted: z.boolean(),

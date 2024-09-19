@@ -20,3 +20,9 @@ docker ps
 # To view container's logs (optional)
 docker logs container-id
 ```
+
+### Create secure JWT
+
+```
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```

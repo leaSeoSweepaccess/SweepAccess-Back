@@ -4,7 +4,12 @@ model User {
   lastName              String
   /// @zod.email()
   email                 String        @unique
-  /// @zod.password()
+  /// @zod.min(8, { message: "Password must be at least 8 characters long" })
+  /// @zod.max(20, { message: "Password cannot exceed 20 characters" })
+  /// @zod.regex(/\d/, { message: "Password must contain at least one number" })
+  /// @zod.regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
+  /// @zod.regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
+  /// @zod.regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" })
   password              String?
   isEmailVerified       Boolean       @default(false)
   emailVerificationCode String?

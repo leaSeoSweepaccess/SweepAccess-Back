@@ -17,6 +17,16 @@ export const userCreateSchema = userSchema
     firstName: true,
     lastName: true,
     email: true,
+    password: true,
   });
 
 export type UserCreate = z.infer<typeof userCreateSchema>;
+
+export const userCreateCodeValidationSchema = z.object({
+  email: z.string().email(),
+  code: z.string().length(6),
+});
+
+export type UserCreateCodeValidation = z.infer<
+  typeof userCreateCodeValidationSchema
+>;

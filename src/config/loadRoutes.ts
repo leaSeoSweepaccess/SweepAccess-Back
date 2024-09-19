@@ -1,16 +1,19 @@
 import { Router, type Express } from 'express';
 
+import authRoutes from '@/routes/auth.routes';
 import applicationRoutes from '@/routes/application.routes';
 import applicationTenantRoutes from '@/routes/applicationTenant.routes';
 import applicationCollaboratorTenantRoutes from '@/routes/applicationCollaboratorTenant.routes';
 import collaboratorTenantRoutes from '@/routes/collaboratorTenant.routes';
 import collaboratorsRoutes from '@/routes/collaborator.routes';
 import tenantRoutes from '@/routes/tenant.routes';
-import githubRoutes from '@/routes/githubRoutes';
+import githubRoutes from '@/routes/github.routes';
 import slackRoutes from '@/routes/slack.routes';
 
 const loadRoutes = (app: Express) => {
   const apiRouterV1 = Router();
+  // Auth
+  apiRouterV1.use('/auth', authRoutes);
 
   apiRouterV1.use('/applications', applicationRoutes);
   apiRouterV1.use('/collaborators', collaboratorsRoutes);
