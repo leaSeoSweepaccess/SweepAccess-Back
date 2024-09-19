@@ -1,0 +1,20 @@
+model User {
+  id                    String        @id
+  firstName             String
+  lastName              String
+  /// @zod.email()
+  email                 String        @unique
+  /// @zod.password()
+  password              String?
+  isEmailVerified       Boolean       @default(false)
+  emailVerificationCode String?
+  isDeleted             Boolean       @default(false)
+  createdAt             DateTime?     @default(now())
+  createdBy             String?
+  updatedAt             DateTime?     @updatedAt
+  updatedBy             String?
+  deletedAt             DateTime?
+  deletedBy             String?
+  UserSession           UserSession[]
+  UserToken             UserToken[]
+}

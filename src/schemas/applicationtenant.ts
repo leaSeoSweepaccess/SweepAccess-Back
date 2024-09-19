@@ -12,12 +12,12 @@ export const applicationTenantSchema = z.object({
   tenantId: z.string(),
   jsonData: jsonSchema,
   isDeleted: z.boolean(),
-  createdAt: z.date().nullish(),
   createdBy: z.string().nullish(),
-  updatedAt: z.date().nullish(),
   updatedBy: z.string().nullish(),
   deletedAt: z.date().nullish(),
   deletedBy: z.string().nullish(),
+  createdAt: z.date().nullish(),
+  updatedAt: z.date().nullish(),
 })
 
 export interface CompleteApplicationTenant extends z.infer<typeof applicationTenantSchema> {

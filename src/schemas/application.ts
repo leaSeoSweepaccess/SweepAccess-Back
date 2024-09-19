@@ -12,15 +12,15 @@ export const applicationSchema = z.object({
   name: z.string(),
   description: z.string().nullish(),
   url: z.string().url().nullish(),
-  avatar: z.string().url().nullish(),
-  jsonData: jsonSchema,
   isDeleted: z.boolean(),
-  createdAt: z.date().nullish(),
-  createdBy: z.string().nullish(),
-  updatedAt: z.date().nullish(),
-  updatedBy: z.string().nullish(),
   deletedAt: z.date().nullish(),
+  avatar: z.string().url().nullish(),
+  createdBy: z.string().nullish(),
   deletedBy: z.string().nullish(),
+  jsonData: jsonSchema,
+  updatedBy: z.string().nullish(),
+  createdAt: z.date().nullish(),
+  updatedAt: z.date().nullish(),
 })
 
 export interface CompleteApplication extends z.infer<typeof applicationSchema> {

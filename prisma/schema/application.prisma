@@ -1,21 +1,19 @@
 model Application {
-  id          String  @id
-  name        String
-  description String?
+  id                            String                          @id
+  name                          String
+  description                   String?
   /// @zod.url()
-  url         String?
+  url                           String?
+  isDeleted                     Boolean                         @default(false)
+  deletedAt                     DateTime?
   /// @zod.url()
-  avatar      String?
-  jsonData    Json? // aca vamos a guardar por ejemplo las organizations de github
-
-  isDeleted Boolean   @default(false)
-  createdAt DateTime? @default(now())
-  createdBy String?
-  updatedAt DateTime? @updatedAt
-  updatedBy String?
-  deletedAt DateTime?
-  deletedBy String?
-
+  avatar                        String?
+  createdBy                     String?
+  deletedBy                     String?
+  jsonData                      Json?
+  updatedBy                     String?
+  createdAt                     DateTime?                       @default(now())
+  updatedAt                     DateTime?                       @updatedAt
   ApplicationCollaboratorTenant ApplicationCollaboratorTenant[]
   ApplicationTenant             ApplicationTenant[]
 }

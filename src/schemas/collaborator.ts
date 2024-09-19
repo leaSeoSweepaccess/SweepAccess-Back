@@ -9,12 +9,12 @@ export const collaboratorSchema = z.object({
   lastName: z.string().nullish(),
   avatar: z.string().url().nullish(),
   isDeleted: z.boolean(),
-  createdAt: z.date().nullish(),
-  createdBy: z.string().nullish(),
-  updatedAt: z.date().nullish(),
-  updatedBy: z.string().nullish(),
   deletedAt: z.date().nullish(),
+  createdBy: z.string().nullish(),
   deletedBy: z.string().nullish(),
+  updatedBy: z.string().nullish(),
+  createdAt: z.date().nullish(),
+  updatedAt: z.date().nullish(),
 })
 
 export interface CompleteCollaborator extends z.infer<typeof collaboratorSchema> {

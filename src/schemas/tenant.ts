@@ -4,17 +4,17 @@ import { CompleteApplicationCollaboratorTenant, relatedApplicationCollaboratorTe
 export const tenantSchema = z.object({
   id: z.string(),
   name: z.string(),
+  email: z.string().email(),
+  deletedAt: z.date().nullish(),
+  isDeleted: z.boolean(),
+  avatar: z.string().url().nullish(),
   description: z.string().nullish(),
   url: z.string().url().nullish(),
-  avatar: z.string().url().nullish(),
-  email: z.string().email(),
-  isDeleted: z.boolean(),
-  createdAt: z.date().nullish(),
   createdBy: z.string().nullish(),
-  updatedAt: z.date().nullish(),
-  updatedBy: z.string().nullish(),
-  deletedAt: z.date().nullish(),
   deletedBy: z.string().nullish(),
+  updatedBy: z.string().nullish(),
+  createdAt: z.date().nullish(),
+  updatedAt: z.date().nullish(),
 })
 
 export interface CompleteTenant extends z.infer<typeof tenantSchema> {

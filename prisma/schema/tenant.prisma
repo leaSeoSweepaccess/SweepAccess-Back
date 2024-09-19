@@ -1,22 +1,20 @@
 model Tenant {
-  id          String  @id
-  name        String
-  description String?
-  /// @zod.url()
-  url         String?
-  /// @zod.url()
-  avatar      String?
+  id                            String                          @id
+  name                          String
   /// @zod.email()
-  email       String  @unique
-
-  isDeleted Boolean   @default(false)
-  createdAt DateTime? @default(now())
-  createdBy String?
-  updatedAt DateTime? @updatedAt
-  updatedBy String?
-  deletedAt DateTime?
-  deletedBy String?
-
+  email                         String                          @unique
+  deletedAt                     DateTime?
+  isDeleted                     Boolean                         @default(false)
+  /// @zod.url()
+  avatar                        String?
+  description                   String?
+  /// @zod.url()
+  url                           String?
+  createdBy                     String?
+  deletedBy                     String?
+  updatedBy                     String?
+  createdAt                     DateTime?                       @default(now())
+  updatedAt                     DateTime?                       @updatedAt
   ApplicationCollaboratorTenant ApplicationCollaboratorTenant[]
   ApplicationTenant             ApplicationTenant[]
   CollaboratorTenant            CollaboratorTenant[]

@@ -10,14 +10,14 @@ const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.arr
 export const collaboratorTenantSchema = z.object({
   collaboratorId: z.string(),
   tenantId: z.string(),
-  jsonData: jsonSchema,
   isDeleted: z.boolean(),
-  createdAt: z.date().nullish(),
   createdBy: z.string().nullish(),
-  updatedAt: z.date().nullish(),
   updatedBy: z.string().nullish(),
   deletedAt: z.date().nullish(),
   deletedBy: z.string().nullish(),
+  createdAt: z.date().nullish(),
+  updatedAt: z.date().nullish(),
+  jsonData: jsonSchema,
 })
 
 export interface CompleteCollaboratorTenant extends z.infer<typeof collaboratorTenantSchema> {

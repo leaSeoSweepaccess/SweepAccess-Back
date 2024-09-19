@@ -1,22 +1,18 @@
 model ApplicationCollaboratorTenant {
-  Application   Application @relation(fields: [applicationId], references: [id])
-  applicationId String
-
-  Collaborator   Collaborator @relation(fields: [collaboratorId], references: [id])
+  applicationId  String
   collaboratorId String
-
-  Tenant   Tenant @relation(fields: [tenantId], references: [id])
-  tenantId String
-
-  jsonData Json?
-
-  isDeleted Boolean   @default(false)
-  createdAt DateTime? @default(now())
-  createdBy String?
-  updatedAt DateTime? @updatedAt
-  updatedBy String?
-  deletedAt DateTime?
-  deletedBy String?
+  tenantId       String
+  jsonData       Json?
+  isDeleted      Boolean      @default(false)
+  createdAt      DateTime?    @default(now())
+  createdBy      String?
+  updatedAt      DateTime?    @updatedAt
+  updatedBy      String?
+  deletedAt      DateTime?
+  deletedBy      String?
+  Application    Application  @relation(fields: [applicationId], references: [id])
+  Collaborator   Collaborator @relation(fields: [collaboratorId], references: [id])
+  Tenant         Tenant       @relation(fields: [tenantId], references: [id])
 
   @@id([applicationId, collaboratorId, tenantId])
 }
