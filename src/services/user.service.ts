@@ -18,7 +18,7 @@ export const userService = {
     try {
       return bcrypt.hash(password, 10);
     } catch (error) {
-      throw 'Error hashing password (bcrypt)'
+      throw 'Error hashing password (bcrypt)';
     }
   },
 
