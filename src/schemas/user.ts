@@ -6,13 +6,7 @@ export const userSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),
-  password: z.string()
-    .min(8, { message: "Password must be at least 8 characters long" })    // Minimum length 8
-    .max(20, { message: "Password cannot exceed 20 characters" })          // Maximum length 20
-    .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })  // At least one uppercase letter
-    .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })  // At least one lowercase letter
-    .regex(/\d/, { message: "Password must contain at least one number" })               // At least one number
-    .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" }), // At least one special character
+  password: z.string().nullish(),
   isEmailVerified: z.boolean(),
   emailVerificationCode: z.string().nullish(),
   isDeleted: z.boolean(),
