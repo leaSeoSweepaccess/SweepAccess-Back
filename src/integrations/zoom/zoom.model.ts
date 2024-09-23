@@ -24,8 +24,8 @@ export const zoomModel = {
             'Content-Type': 'application/x-www-form-urlencoded',
             Accept: 'application/json',
           },
-        }
-      )
+        },
+      );
 
       return response.data;
     } catch (error) {
@@ -41,5 +41,5 @@ export const zoomModel = {
         error_message: 'Error en la autenticación',
       };
     }
-  }
-}
+  },
+};

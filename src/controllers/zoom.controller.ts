@@ -10,13 +10,16 @@ export const zoomController = {
     const { body } = req;
 
     if (body.event === 'endpoint.url_validation') {
-      const hashForValidate = crypto.createHmac('sha256', env.ZOOM_SECRET_TOKEN as string).update(body.payload.plainToken).digest('hex')
+      const hashForValidate = crypto
+        .createHmac('sha256', env.ZOOM_SECRET_TOKEN as string)
+        .update(body.payload.plainToken)
+        .digest('hex');
 
-      res.status(200)
+      res.status(200);
       res.json({
-        "plainToken": body.payload.plainToken,
-        "encryptedToken": hashForValidate
-      })
+        plainToken: body.payload.plainToken,
+        encryptedToken: hashForValidate,
+      });
     }
 
     // si no es validacion, aca debemos operar agregando o sacando colaboradores
@@ -40,6 +43,5 @@ export const zoomController = {
     res.json({
       accessToken,
     });
-  }
-
-}
+  },
+};
