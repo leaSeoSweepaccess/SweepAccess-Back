@@ -65,7 +65,10 @@ export function badRequestResponse(res: Response, error: any = 'Bad request') {
 /**
  * The client must authenticate itself to get the requested response.
  */
-export function unauthorizedResponse(res: Response, error: any = 'Unauthorized') {
+export function unauthorizedResponse(
+  res: Response,
+  error: any = 'Unauthorized',
+) {
   return sendResponse(res, 401, false, undefined, error);
 }
 
