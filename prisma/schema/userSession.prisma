@@ -3,6 +3,7 @@ model UserSession {
   userId       String
   refreshToken String
   createdAt    DateTime @default(now())
+  createdBy    String?
   expiresAt    DateTime
   user         User     @relation(fields: [userId], references: [id])
 }

@@ -6,6 +6,7 @@ export const userTokenSchema = z.object({
   userId: z.string(),
   token: z.string(),
   createdAt: z.date(),
+  createdBy: z.string().nullish(),
   expiresAt: z.date(),
 })
 

@@ -10,7 +10,10 @@ const genericOmit = {
   // deletedBy: true,
 };
 
-export const createRepository = <T, C, U>(model: any) => ({
+export const createRepository = <T, C, U>(
+  model: any,
+  isAutoincrement = false,
+) => ({
   getAll: async (): Promise<T[] | null | undefined> => {
     return model.findMany({
       omit: genericOmit,
@@ -70,18 +73,19 @@ export const createRepository = <T, C, U>(model: any) => ({
   },
 
   getByMultipleFields: async (
-    fields: { [key: string]: string }[],
-    value: string | number | boolean | Date,
+    fields: { [key: string]: any },
+    includeIsDeleted = true,
   ): Promise<T[] | null | undefined> => {
-    if (!fields || !fields.length) return;
-
-    return model.findMany({
-      omit: genericOmit,
-      where: {
-        ...fields,
-        isDeleted: false,
-      },
-    });
+    try {
+      return model.findMany({
+        omit: genericOmit,
+        where: includeIsDeleted
+          ? { ...fields, isDeleted: false }
+          : { ...fields },
+      });
+    } catch (err) {
+      console.log('err', err);
+    }
   },
 
   insert: async (
@@ -90,9 +94,14 @@ export const createRepository = <T, C, U>(model: any) => ({
   ): Promise<T | null | undefined> => {
     const doesId = hasId<C>(element);
 
-    const data: C = !doesId
-      ? { ...element, createdBy: userId ?? 'system', id: generateDbId(model) }
-      : { ...element, createdBy: userId ?? 'system' };
+    const data: C =
+      doesId || isAutoincrement
+        ? { ...element, createdBy: userId ?? 'system' }
+        : {
+            ...element,
+            createdBy: userId ?? 'system',
+            id: generateDbId(model),
+          };
 
     return await model.create({
       omit: genericOmit,
@@ -125,6 +134,10 @@ export const createRepository = <T, C, U>(model: any) => ({
         deletedBy: userId ?? 'system',
       },
     });
+  },
+
+  hardDelete: async (where: any) => {
+    return model.deleteMany(where);
   },
 });
 

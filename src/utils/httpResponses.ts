@@ -65,14 +65,14 @@ export function badRequestResponse(res: Response, error: any = 'Bad request') {
 /**
  * The client must authenticate itself to get the requested response.
  */
-export function unauthorizedResponse(res: Response, error = 'Unauthorized') {
+export function unauthorizedResponse(res: Response, error: any = 'Unauthorized') {
   return sendResponse(res, 401, false, undefined, error);
 }
 
 /**
  * The client does not have access rights to the content.
  */
-export function forbiddenResponse(res: Response, error = 'Forbidden') {
+export function forbiddenResponse(res: Response, error: any = 'Forbidden') {
   return sendResponse(res, 403, false, undefined, error);
 }
 

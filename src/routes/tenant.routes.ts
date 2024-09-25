@@ -6,14 +6,13 @@ import {
 import { tenantCreateSchema } from '@/types/tenant/tenantCreate.type';
 import { tenantController as controller } from '@/controllers/tenant.controller';
 import { tenantUpdateSchema } from '@/types/tenant/tenantUpdate.type';
+import { authMiddleware } from '@/middlewares/authMiddleware';
 // import { validateToken } from '../middlewares/authMiddleware';
 
 const router = Router();
 
 // JWT Secure Token
-// router.use(validateToken);
-
-// TODO: Add authorization by role
+router.use(authMiddleware);
 
 // Get all Tenants paginated
 router.get('/', controller.getAll);

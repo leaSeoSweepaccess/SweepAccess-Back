@@ -6,6 +6,7 @@ export const userSessionSchema = z.object({
   userId: z.string(),
   refreshToken: z.string(),
   createdAt: z.date(),
+  createdBy: z.string().nullish(),
   expiresAt: z.date(),
 })
 

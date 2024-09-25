@@ -16,7 +16,8 @@ const env = {
     Number(process.env.COMMON_RATE_LIMIT_MAX_REQUESTS) || 20,
 
   // Auth
-  JWT_SECRET: process.env.JWT_SECRET as string,
+  ACCESS_JWT_SECRET: process.env.ACCESS_JWT_SECRET as string,
+  REFRESH_JWT_SECRET: process.env.REFRESH_JWT_SECRET as string,
   ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN as string,
   REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN as string,
 
