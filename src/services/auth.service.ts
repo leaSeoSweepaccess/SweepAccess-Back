@@ -10,8 +10,8 @@ import { userSessionRepository } from '@/repositories/userSession.repository';
 
 export const authService = {
   // sign up
-  hashPassword: async (password: string) => {
-    return bcrypt.hash(password, 10);
+  hash: async (password: string) => {
+    return bcrypt.hash(password, env.HASH_SALT);
   },
 
   createVerificationCode: async () => {
@@ -19,7 +19,7 @@ export const authService = {
   },
 
   createUser: async (user: UserCreate) => {
-    const hashedPassword = await authService.hashPassword(user.password!);
+    const hashedPassword = await authService.hash(user.password!);
     const emailVerificationCode = await authService.createVerificationCode();
 
     return repository.insert({
