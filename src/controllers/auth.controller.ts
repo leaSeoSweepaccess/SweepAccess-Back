@@ -14,6 +14,10 @@ import env from '@/config/env';
 
 const modelName = 'Auth';
 
+interface CustomRequest extends Request {
+  userId?: string;
+}
+
 export const authController = {
   signup: async (req: Request, res: Response) => {
     try {
@@ -64,7 +68,7 @@ export const authController = {
       const user = await userService.findByEmail(email);
       if (!user) throw 'Invalid credentials';
 
-      const isPasswordVerified = await authService.checkPassword(
+      const isPasswordVerified = await authService.checkHash(
         password,
         user.password!,
       );
@@ -100,6 +104,35 @@ export const authController = {
       });
     } catch (error) {
       forbiddenResponse(res, error);
+    }
+  },
+
+  signout: async (req: CustomRequest, res: Response) => {
+    try {
+      const token = await authService.getTokenFromHeader(req);
+      const decoded = await authService.verifyBearerToken(token);
+
+      if (!('userId' in decoded)) {
+        return forbiddenResponse(res, 'Invalid token payload');
+      }
+
+      req.userId = decoded.userId as string;
+
+      try {
+        await authService.deleteBearerToken(req.userId);
+      } catch (error) {
+        throw new Error('Error deleting bearer token');
+      }
+
+      try {
+        await authService.deleteRefreshToken(req.userId);
+      } catch (error) {
+        throw new Error('Error deleting refresh token');
+      }
+
+      return noContentResponse(res);
+    } catch (err) {
+      return forbiddenResponse(res, 'Invalid token');
     }
   },
 };

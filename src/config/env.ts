@@ -20,7 +20,7 @@ const env = {
   REFRESH_JWT_SECRET: process.env.REFRESH_JWT_SECRET as string,
   ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN as string,
   REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN as string,
-  HASH_SALT: process.env.HASH_SALT as string,
+  HASH_SALT: Number(process.env.HASH_SALT),
   // Github
   GITHUB_AUTHENTICATION_CALLBACK_URL:
     process.env.GITHUB_AUTHENTICATION_CALLBACK_URL,

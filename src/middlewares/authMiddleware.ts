@@ -1,36 +1,27 @@
 import type { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import env from '@/config/env';
-import { forbiddenResponse, unauthorizedResponse } from '@/utils/httpResponses';
+import { forbiddenResponse } from '@/utils/httpResponses';
+import { authService } from '@/services/auth.service';
 
 interface CustomRequest extends Request {
   userId?: string;
 }
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: CustomRequest,
   res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers['authorization'];
+  try {
+    const token = await authService.getTokenFromHeader(req);
+    const decoded = await authService.verifyBearerToken(token);
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return unauthorizedResponse(res, 'No token provided');
-  }
-
-  const token = authHeader.split(' ')[1];
-
-  jwt.verify(token, env.ACCESS_JWT_SECRET as string, (err, decoded) => {
-    if (err) {
-      return forbiddenResponse(res, 'Invalid token');
-    }
-
-    if (typeof decoded === 'object' && 'userId' in decoded) {
-      req.userId = (decoded as JwtPayload).userId as string;
+    if ('userId' in decoded) {
+      req.userId = decoded.userId as string;
+      next();
     } else {
       return forbiddenResponse(res, 'Invalid token payload');
     }
-
-    next();
-  });
+  } catch (err) {
+    return forbiddenResponse(res, err || 'Invalid token');
+  }
 };

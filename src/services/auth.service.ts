@@ -1,5 +1,6 @@
+import type { Request } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import env from '@/config/env';
 import { userRepository as repository } from '@/repositories/user.repository';
 import { UserCreate } from '@/types/user/userCreate.type';
@@ -7,9 +8,9 @@ import { User } from '@prisma/client';
 import { userTokenRepository } from '@/repositories/userToken.repository';
 import { addTimeToDate } from '@/utils/addTimeToDate';
 import { userSessionRepository } from '@/repositories/userSession.repository';
+import logger from '@/logger';
 
 export const authService = {
-  // sign up
   hash: async (password: string) => {
     return bcrypt.hash(password, env.HASH_SALT);
   },
@@ -38,52 +39,68 @@ export const authService = {
       emailVerificationCode: null,
     });
   },
-  //
 
-  checkPassword: async (password: string, hash: string) => {
-    return bcrypt.compare(password, hash);
+  checkHash: async (value: string, hash: string) => {
+    return bcrypt.compare(value, hash);
   },
 
   createAccessToken: async (userId: string) => {
-    const accessToken = jwt.sign({ userId }, env.ACCESS_JWT_SECRET, {
-      expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
-    });
+    try {
+      const accessToken = jwt.sign({ userId }, env.ACCESS_JWT_SECRET, {
+        expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
+      });
 
-    // await userTokenRepository.hardDelete({
-    //   where: { userId },
-    // });
+      // await userTokenRepository.hardDelete({
+      //   where: { userId },
+      // });
 
-    await userTokenRepository.insert({
-      userId,
-      token: accessToken,
-      expiresAt: addTimeToDate(new Date(), env.ACCESS_TOKEN_EXPIRES_IN),
-    });
+      const hashedToken = await authService.hash(accessToken);
 
-    return accessToken;
+      await userTokenRepository.insert({
+        userId,
+        token: hashedToken,
+        expiresAt: addTimeToDate(new Date(), env.ACCESS_TOKEN_EXPIRES_IN),
+      });
+
+      return accessToken;
+    } catch (error) {
+      logger.error(error);
+      throw new Error('Failed to create access token');
+    }
   },
 
   fetchRefreshToken: async (userId: string, refreshToken: string) => {
-    return userSessionRepository.getByMultipleFields(
-      {
-        userId,
-        refreshToken,
-      },
+    const sessions = await userSessionRepository.getByMultipleFields(
+      { userId },
       false,
     );
+
+    const session = sessions?.find(async (result) => {
+      return authService.checkHash(refreshToken, result.refreshToken);
+    });
+
+    return session;
   },
 
   createRefreshToken: async (userId: string) => {
-    const refreshToken = jwt.sign({ userId }, env.REFRESH_JWT_SECRET, {
-      expiresIn: env.REFRESH_TOKEN_EXPIRES_IN,
-    });
+    try {
+      const refreshToken = jwt.sign({ userId }, env.REFRESH_JWT_SECRET, {
+        expiresIn: env.REFRESH_TOKEN_EXPIRES_IN,
+      });
 
-    await userSessionRepository.insert({
-      userId,
-      refreshToken: refreshToken,
-      expiresAt: addTimeToDate(new Date(), env.REFRESH_TOKEN_EXPIRES_IN),
-    });
+      const hashedRefreshToken = await authService.hash(refreshToken);
 
-    return refreshToken;
+      await userSessionRepository.insert({
+        userId,
+        refreshToken: hashedRefreshToken,
+        expiresAt: addTimeToDate(new Date(), env.REFRESH_TOKEN_EXPIRES_IN),
+      });
+
+      return refreshToken;
+    } catch (error) {
+      logger.error(error);
+      throw new Error('Failed to create refresh token');
+    }
   },
 
   generateTokens: async (userId: string) => {
@@ -91,5 +108,34 @@ export const authService = {
     const refreshToken = await authService.createRefreshToken(userId);
 
     return { accessToken, refreshToken };
+  },
+
+  getTokenFromHeader: async (req: Request) => {
+    const authHeader = req.headers['authorization'];
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new Error('No token provided');
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    return token;
+  },
+
+  verifyBearerToken: async (token: string) => {
+    return jwt.verify(token, env.ACCESS_JWT_SECRET as string) as JwtPayload;
+  },
+
+  deleteBearerToken: async (userId: string) => {
+    await userTokenRepository.hardDelete({ userId });
+  },
+
+  deleteRefreshToken: async (userId: string) => {
+    await userSessionRepository.hardDelete({ userId });
+  },
+
+  signout: async (userId: string) => {
+    await userTokenRepository.hardDelete({ userId });
+    await userSessionRepository.hardDelete({ userId });
   },
 };

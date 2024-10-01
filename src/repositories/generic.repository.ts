@@ -137,7 +137,7 @@ export const createRepository = <T, C, U>(
   },
 
   hardDelete: async (where: any) => {
-    return model.deleteMany(where);
+    return model.deleteMany({ where: where });
   },
 });
 

@@ -34,4 +34,7 @@ router.post(
 // Sign in
 router.post('/signin', validateRequest(authSigninSchema), controller.signin);
 
+// Signout
+router.post('/signout', controller.signout);
+
 export default router;
