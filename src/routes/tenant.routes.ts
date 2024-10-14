@@ -12,7 +12,7 @@ import { authMiddleware } from '@/middlewares/authMiddleware';
 const router = Router();
 
 // JWT Secure Token
-router.use(authMiddleware);
+// router.use(authMiddleware);
 
 // Get all Tenants paginated
 router.get('/', controller.getAll);

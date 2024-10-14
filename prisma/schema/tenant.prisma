@@ -18,4 +18,13 @@ model Tenant {
   ApplicationCollaboratorTenant ApplicationCollaboratorTenant[]
   ApplicationTenant             ApplicationTenant[]
   CollaboratorTenant            CollaboratorTenant[]
+  users                         User[]
+  seats                         Seat[]
+  orders                        Order[]
+  subscriptionTier              SubscriptionTier                @default(FREE)
+}
+
+enum SubscriptionTier {
+  FREE
+  PAID
 }

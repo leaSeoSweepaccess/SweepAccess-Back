@@ -22,4 +22,8 @@ model User {
   deletedBy             String?
   UserSession           UserSession[]
   UserToken             UserToken[]
+  tenant                Tenant        @relation(fields: [tenantId], references: [id])
+  tenantId              String        @default("ten_default")
+  seat                  Seat?         @relation(fields: [seatId], references: [id])
+  seatId                String?       @unique
 }

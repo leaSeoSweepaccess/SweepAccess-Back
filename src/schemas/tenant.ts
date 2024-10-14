@@ -1,5 +1,6 @@
 import * as z from "zod"
-import { CompleteApplicationCollaboratorTenant, relatedApplicationCollaboratorTenantSchema, CompleteApplicationTenant, relatedApplicationTenantSchema, CompleteCollaboratorTenant, relatedCollaboratorTenantSchema } from "./index"
+import { SubscriptionTier } from "@prisma/client"
+import { CompleteApplicationCollaboratorTenant, relatedApplicationCollaboratorTenantSchema, CompleteApplicationTenant, relatedApplicationTenantSchema, CompleteCollaboratorTenant, relatedCollaboratorTenantSchema, CompleteUser, relatedUserSchema, CompleteSeat, relatedSeatSchema, CompleteOrder, relatedOrderSchema } from "./index"
 
 export const tenantSchema = z.object({
   id: z.string(),
@@ -15,12 +16,16 @@ export const tenantSchema = z.object({
   updatedBy: z.string().nullish(),
   createdAt: z.date().nullish(),
   updatedAt: z.date().nullish(),
+  subscriptionTier: z.nativeEnum(SubscriptionTier),
 })
 
 export interface CompleteTenant extends z.infer<typeof tenantSchema> {
   ApplicationCollaboratorTenant: CompleteApplicationCollaboratorTenant[]
   ApplicationTenant: CompleteApplicationTenant[]
   CollaboratorTenant: CompleteCollaboratorTenant[]
+  users: CompleteUser[]
+  seats: CompleteSeat[]
+  orders: CompleteOrder[]
 }
 
 /**
@@ -32,4 +37,7 @@ export const relatedTenantSchema: z.ZodSchema<CompleteTenant> = z.lazy(() => ten
   ApplicationCollaboratorTenant: relatedApplicationCollaboratorTenantSchema.array(),
   ApplicationTenant: relatedApplicationTenantSchema.array(),
   CollaboratorTenant: relatedCollaboratorTenantSchema.array(),
+  users: relatedUserSchema.array(),
+  seats: relatedSeatSchema.array(),
+  orders: relatedOrderSchema.array(),
 }))

@@ -1,0 +1,16 @@
+model Order {
+  id        String      @id
+  tenant    Tenant      @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  amount    Float
+  currency  String
+  status    OrderStatus
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}

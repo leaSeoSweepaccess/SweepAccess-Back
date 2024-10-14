@@ -1,0 +1,8 @@
+model Seat {
+  id        String   @id
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  user      User?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -12,11 +12,7 @@ export const tenantCreateSchema = tenantSchema
     deletedAt: true,
     deletedBy: true,
   })
-  .partial({
-    description: true,
-    url: true,
-    avatar: true,
-  })
+  .partial()
   .required({
     name: true,
     email: true,
