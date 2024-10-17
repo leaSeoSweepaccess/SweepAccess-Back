@@ -16,6 +16,8 @@ export const githubController = {
     //ACA DEBERIAMOS GUARDAR El ACCESS TOKEN RELACIONANDOLO CON EL TENANT
     // Y CON LA APPLICATION
 
+    console.log("GITHUB ACCESS TOKEN --> ", accessToken);
+
     res.json({
       accessToken,
     });
