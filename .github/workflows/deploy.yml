@@ -21,11 +21,11 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Generate Prisma migration
-        run: yarn prisma-generate
+      # - name: Generate Prisma migration
+      #   run: yarn prisma-generate
 
-      - name: Run Prisma migration
-        run: yarn prisma-migrate
+      # - name: Run Prisma migration
+      #   run: yarn prisma-migrate
 
       - name: Build the app
         run: yarn build
