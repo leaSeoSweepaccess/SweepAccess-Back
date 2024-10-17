@@ -44,7 +44,7 @@ jobs:
 
       - name: Build and tag Docker image
         run: |
-          IMAGE_NAME="SweepAccess-dev"
+          IMAGE_NAME="sweepAccess-dev"
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$TIMESTAMP .
 
