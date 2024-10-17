@@ -10,65 +10,65 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-    - name: Install dependencies
-      run: yarn install
+      - name: Install dependencies
+        run: yarn install
 
-    - name: Generate Prisma migration
-      run: yarn prisma-generate
+      - name: Generate Prisma migration
+        run: yarn prisma-generate
 
-    - name: Run Prisma migration
-      run: yarn prisma-migrate
+      - name: Run Prisma migration
+        run: yarn prisma-migrate
 
-    - name: Build the app
-      run: yarn build
+      - name: Build the app
+        run: yarn build
 
-    - name: Log in to Amazon ECR
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
-      run: |
-        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
+      - name: Log in to Amazon ECR
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
 
-    - name: Build and tag Docker image
-      run: |
-        IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}"
-        TIMESTAMP=$(date +%Y%m%d%H%M%S)
-        docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$TIMESTAMP .
+      - name: Build and tag Docker image
+        run: |
+          IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}"
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$TIMESTAMP .
 
-    - name: Push Docker image to Amazon ECR
-      run: |
-        IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}"
-        TIMESTAMP=$(date +%Y%m%d%H%M%S)
-        docker push $IMAGE_NAME:latest
-        docker push $IMAGE_NAME:$TIMESTAMP
+      - name: Push Docker image to Amazon ECR
+        run: |
+          IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}"
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:$TIMESTAMP
 
-    - name: Clean up old Docker images
-      run: |
-        REPOSITORY="${{ secrets.AWS_ECR_REPOSITORY }}"
-        aws ecr list-images --repository-name $REPOSITORY --region ${{ secrets.AWS_REGION }} --query 'imageIds[*]' --output json > images.json
-        IMAGE_IDS=$(aws ecr describe-images --repository-name $REPOSITORY --region ${{ secrets.AWS_REGION }} --query 'sort_by(imageDetails,&imagePushedAt)[0:-3].imageTags[*]' --output text)
-        for IMAGE_ID in $IMAGE_IDS; do
-          aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageTag=$IMAGE_ID --region ${{ secrets.AWS_REGION }}
-        done
+      - name: Clean up old Docker images
+        run: |
+          REPOSITORY="${{ secrets.AWS_ECR_REPOSITORY }}"
+          aws ecr list-images --repository-name $REPOSITORY --region ${{ secrets.AWS_REGION }} --query 'imageIds[*]' --output json > images.json
+          IMAGE_IDS=$(aws ecr describe-images --repository-name $REPOSITORY --region ${{ secrets.AWS_REGION }} --query 'sort_by(imageDetails,&imagePushedAt)[0:-3].imageTags[*]' --output text)
+          for IMAGE_ID in $IMAGE_IDS; do
+            aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageTag=$IMAGE_ID --region ${{ secrets.AWS_REGION }}
+          done
 
-    - name: Connect to EC2 and deploy
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
-      run: |
-        ssh -o StrictHostKeyChecking=no -i "${{ secrets.EC2_SSH_KEY }}" ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-          docker pull $IMAGE_NAME:latest
-          docker stop my-container || true
-          docker rm my-container || true
-          docker run -d --name my-container -p 3000:3000 $IMAGE_NAME:latest
-        EOF
+      - name: Connect to EC2 and deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i "${{ secrets.EC2_SSH_KEY }}" ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            docker pull $IMAGE_NAME:latest
+            docker stop my-container || true
+            docker rm my-container || true
+            docker run -d --name my-container -p 3000:3000 $IMAGE_NAME:latest
+          EOF
