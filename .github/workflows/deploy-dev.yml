@@ -70,14 +70,14 @@ jobs:
           done
 
       - name: Connect to EC2 and deploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i "${{ secrets.EC2_SSH_KEY }}" ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          echo "$SSH_PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@your-ec2-instance-ip << 'EOF'
             docker pull $IMAGE_NAME:latest
             docker stop sweepaccess-back || true
             docker rm sweepaccess-back || true
-            docker run -d --name sweepaccess-back -p 3012:3012 $IMAGE_NAME:latest
+            docker run -d --name sweepaccess-back -p 3000:3000 $IMAGE_NAME:latest
           EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
