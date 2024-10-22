@@ -69,25 +69,20 @@ jobs:
             aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageTag=$IMAGE_ID --region $AWS_REGION
           done
 
-      - name: Run deployment on EC2 using AWS SSM
+      - name: Deploy to EC2 using AWS SSM
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
             --targets '[{"Key":"instanceIds","Values":["i-04c6cf55f2164dc65"]}]' \
             --parameters '{"commands":[
-              "echo ECR Login",
-              "aws ecr get-login-password --region '$AWS_REGION' | docker login --username AWS --password-stdin '${{ secrets.AWS_ACCOUNT_ID }}'.dkr.ecr.'$AWS_REGION'.amazonaws.com",
-              "echo Docker pull",
-              "docker pull '${{ secrets.AWS_ACCOUNT_ID }}'.dkr.ecr.'$AWS_REGION'.amazonaws.com/sweepaccess-backend:latest",
-              "echo Stopping old container",
+              "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com",
+              "docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sweepaccess-backend:latest",
               "docker stop sweepaccess-backend || true",
               "docker rm sweepaccess-backend || true",
-              "echo Running new container",
-              "docker run -d --name sweepaccess-backend -p 80:80 '${{ secrets.AWS_ACCOUNT_ID }}'.dkr.ecr.'$AWS_REGION'.amazonaws.com/sweepaccess-backend:latest"
+              "docker run -d --name sweepaccess-backend -p 80:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sweepaccess-backend:latest"
             ]}' \
-            --region $AWS_REGION
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+            --region ${{ secrets.AWS_REGION }}
 
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
