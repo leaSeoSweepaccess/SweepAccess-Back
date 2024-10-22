@@ -69,21 +69,31 @@ jobs:
             aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageTag=$IMAGE_ID --region $AWS_REGION
           done
 
-      - name: Run deployment on EC2 using AWS SSM
+      - name: Deploy Docker container on EC2
         run: |
-          command_id=$(aws ssm send-command \
-            --document-name "AWS-RunShellScript" \
-            --targets '[{"Key":"instanceIds","Values":["i-04c6cf55f2164dc65"]}]' \
-            --parameters '{"commands":["aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com", "docker pull $IMAGE_NAME:latest", "docker stop sweepaccess-back || true", "docker rm sweepaccess-back || true", "docker run -d --name sweepaccess-back -p 80:80 $IMAGE_NAME:latest"]}' \
-            --region $AWS_REGION \
-            --query "Command.CommandId" \
-            --output text)
-          
-          aws ssm list-command-invocations --command-id $command_id --details
+          IMAGE_NAME=$IMAGE_NAME
+          ACCOUNT=${{ secrets.AWS_ACCOUNT_ID }}
+          REGION=$AWS_REGION
+
+          echo "-- Variables"
+          echo "ImageName: "$IMAGE_NAME
+          echo "Account: "$ACCOUNT
+          echo "Region: "$REGION
+
+          echo "ECR Login"
+          aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_NAME
+
+          echo "Docker pull"
+          docker compose pull --quiet
+
+          echo "Docker compose up"
+          docker compose up -d --remove-orphans nginx app
+
+          echo "Docker prune Images"
+          docker image prune --force --all
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           IMAGE_NAME: '${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sweepaccess-backend'
 
