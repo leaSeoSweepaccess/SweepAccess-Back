@@ -77,7 +77,7 @@ jobs:
             docker pull $IMAGE_NAME:latest
             docker stop sweepaccess-back || true
             docker rm sweepaccess-back || true
-            docker run -d --name sweepaccess-back -p 3000:3000 $IMAGE_NAME:latest
+            docker run -d --name sweepaccess-back -p 3012:3012 $IMAGE_NAME:latest
           EOF
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
