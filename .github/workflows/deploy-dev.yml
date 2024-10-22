@@ -73,7 +73,7 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@your-ec2-instance-ip << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@<your-ec2-instance-ip> << 'EOF'
             docker pull $IMAGE_NAME:latest
             docker stop sweepaccess-back || true
             docker rm sweepaccess-back || true
