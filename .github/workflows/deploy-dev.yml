@@ -81,5 +81,12 @@ jobs:
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
             --targets '[{"Key":"instanceIds","Values":["i-04c6cf55f2164dc65"]}]' \
-            --parameters '{"commands":["aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 886436968289.dkr.ecr.us-east-1.amazonaws.com", "docker pull 886436968289.dkr.ecr.us-east-1.amazonaws.com/sweepaccess-backend:latest", "docker run -d --name sweepaccess-backend -p 80:80 886436968289.dkr.ecr.us-east-1.amazonaws.com/sweepaccess-backend:latest"]}' \
+            --parameters '{"commands":[
+              "docker stop sweepaccess-backend || true", 
+              "docker rm sweepaccess-backend || true", 
+              "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 886436968289.dkr.ecr.us-east-1.amazonaws.com", 
+              "docker pull 886436968289.dkr.ecr.us-east-1.amazonaws.com/sweepaccess-backend:latest", 
+              "docker run -d --name sweepaccess-backend -p 80:80 886436968289.dkr.ecr.us-east-1.amazonaws.com/sweepaccess-backend:latest"
+            ]}' \
             --region us-east-1
+
