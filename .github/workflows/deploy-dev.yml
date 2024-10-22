@@ -80,13 +80,13 @@ jobs:
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets '[{"Key":"instanceIds","Values":["i-04c6cf55f2164dc65"]}]' \
+            --targets '[{"Key":"instanceIds","Values":["${{ secrets.EC2_DEV_INSTANCE_ID }}"]}]' \
             --parameters '{"commands":[
-              "docker stop sweepaccess-backend || true", 
-              "docker rm sweepaccess-backend || true", 
-              "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 886436968289.dkr.ecr.us-east-1.amazonaws.com", 
-              "docker pull 886436968289.dkr.ecr.us-east-1.amazonaws.com/sweepaccess-backend:latest", 
-              "docker run -d --name sweepaccess-backend -p 80:80 886436968289.dkr.ecr.us-east-1.amazonaws.com/sweepaccess-backend:latest"
+              "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com", 
+              "docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/sweepaccess-backend:latest",
+              "docker stop sweepaccess-backend || true",
+              "docker rm sweepaccess-backend || true",
+              "docker run -d --name sweepaccess-backend -p 80:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/sweepaccess-backend:latest"
             ]}' \
-            --region us-east-1
+            --region $AWS_REGION
 
