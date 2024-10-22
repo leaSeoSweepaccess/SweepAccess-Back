@@ -21,18 +21,18 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      # - name: Generate Prisma migration
-      #   env:
-      #     DATABASE_URL: ${{ secrets.DATABASE_URL }} # Agregar DATABASE_URL como variable de entorno
-      #   run: yarn prisma-generate
+      - name: Generate Prisma migration
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }} # Agregar DATABASE_URL como variable de entorno
+        run: yarn prisma-generate
 
-      # - name: Run Prisma migration
-      #   env:
-      #     DATABASE_URL: ${{ secrets.DATABASE_URL }} # Agregar DATABASE_URL como variable de entorno
-      #   run: yarn prisma-migrate
+      - name: Run Prisma migration
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }} # Agregar DATABASE_URL como variable de entorno
+        run: yarn prisma-migrate
 
-      # - name: Build the app
-      #   run: yarn build
+      - name: Build the app
+        run: yarn build
       #IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}"
       - name: Log in to Amazon ECR
         env:
@@ -50,7 +50,7 @@ jobs:
 
       - name: Push Docker image to Amazon ECR
         run: |
-          IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}"
+          IMAGE_NAME="sweepaccess-dev"
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           docker push $IMAGE_NAME:latest
           docker push $IMAGE_NAME:$TIMESTAMP
