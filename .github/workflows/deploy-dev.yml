@@ -75,15 +75,15 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --targets '[{"Key":"instanceIds","Values":["i-04c6cf55f2164dc65"]}]' \
             --parameters '{"commands":[
-              \"echo ECR Login\",
-              \"aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com\",
-              \"echo Docker pull\",
-              \"docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/sweepaccess-backend:latest\",
-              \"echo Stopping old container\",
-              \"docker stop sweepaccess-backend || true\",
-              \"docker rm sweepaccess-backend || true\",
-              \"echo Running new container\",
-              \"docker run -d --name sweepaccess-backend -p 80:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/sweepaccess-backend:latest\"
+              "echo ECR Login",
+              "aws ecr get-login-password --region '$AWS_REGION' | docker login --username AWS --password-stdin '${{ secrets.AWS_ACCOUNT_ID }}'.dkr.ecr.'$AWS_REGION'.amazonaws.com",
+              "echo Docker pull",
+              "docker pull '${{ secrets.AWS_ACCOUNT_ID }}'.dkr.ecr.'$AWS_REGION'.amazonaws.com/sweepaccess-backend:latest",
+              "echo Stopping old container",
+              "docker stop sweepaccess-backend || true",
+              "docker rm sweepaccess-backend || true",
+              "echo Running new container",
+              "docker run -d --name sweepaccess-backend -p 80:80 '${{ secrets.AWS_ACCOUNT_ID }}'.dkr.ecr.'$AWS_REGION'.amazonaws.com/sweepaccess-backend:latest"
             ]}' \
             --region $AWS_REGION
         env:
