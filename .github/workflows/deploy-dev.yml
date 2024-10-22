@@ -73,11 +73,11 @@ jobs:
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets '[{"Key":"instanceIds","Values":["<your-ec2-instance-id>"]}]' \
+            --targets '[{"Key":"instanceIds","Values":["i-04c6cf55f2164dc65"]}]' \
             --parameters '{"commands":["docker pull $IMAGE_NAME:latest", "docker stop sweepaccess-back || true", "docker rm sweepaccess-back || true", "docker run -d --name sweepaccess-back -p 3012:3012 $IMAGE_NAME:latest"]}' \
             --region $AWS_REGION
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          IMAGE_NAME: "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sweepaccess-backend"
+          IMAGE_NAME: '${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sweepaccess-backend'
