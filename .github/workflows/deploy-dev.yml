@@ -42,16 +42,17 @@ jobs:
         run: |
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
 
+      - name: Set timestamp
+        run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
       - name: Build and tag Docker image
         run: |
           IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sweepaccess-backend"
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
           docker build --no-cache -t $IMAGE_NAME:latest -t $IMAGE_NAME:$TIMESTAMP .
 
       - name: Push Docker image to Amazon ECR
         run: |
           IMAGE_NAME="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sweepaccess-backend"
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
           docker push $IMAGE_NAME:latest
           docker push $IMAGE_NAME:$TIMESTAMP
 
