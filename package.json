@@ -7,7 +7,7 @@
     "prestart": "yarn prisma-generate",
     "start": "tsc && node -r ts-node/register -r tsconfig-paths/register dist/src/server.js",
     "dev": "tsx watch --clear-screen=false src/server.ts | pino-pretty",
-    "build": "tsc",
+    "build": "prisma generate && tsc && mkdir -p ./dist/node_modules/@prisma && cp -R ./node_modules/@prisma/client ./dist/node_modules/@prisma/",
     "postbuild": "cp -R ./node_modules/@prisma/client ./dist/node_modules/@prisma/client",
     "lint": "eslint",
     "test": "jest",
