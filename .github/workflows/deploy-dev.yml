@@ -69,12 +69,15 @@ jobs:
             aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageTag=$IMAGE_ID --region $AWS_REGION
           done
 
-      - name: Create deployment script
+      - name: Connect to EC2 and deploy
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          echo "#!/bin/bash
-          docker pull $IMAGE_NAME:latest
-          docker stop sweepaccess-back || true
-          docker rm sweepaccess-back || true
-          docker run -d --name sweepaccess-back -p 3012:3012 $IMAGE_NAME:latest" > deploy.sh
-          chmod +x deploy.sh
-
+          echo "$SSH_PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@your-ec2-instance-ip << 'EOF'
+            docker pull $IMAGE_NAME:latest
+            docker stop sweepaccess-back || true
+            docker rm sweepaccess-back || true
+            docker run -d --name sweepaccess-back -p 3012:3012 $IMAGE_NAME:latest
+          EOF
