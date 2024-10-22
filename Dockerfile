@@ -14,7 +14,7 @@ RUN yarn install --production
 COPY . .
 
 # Copy the .env file into the container
-COPY .env.local .env
+# COPY .env.local .env
 
 # Expose the app on the desired port (e.g., 3000)
 EXPOSE 3000
