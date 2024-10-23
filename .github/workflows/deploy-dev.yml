@@ -82,11 +82,14 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --targets '[{"Key":"instanceIds","Values":["${{ secrets.EC2_DEV_INSTANCE_ID }}"]}]' \
             --parameters '{"commands":[
+              "sudo systemctl start docker", 
               "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com", 
               "docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/sweepaccess-backend:latest",
               "docker stop sweepaccess-backend || true",
               "docker rm sweepaccess-backend || true",
-              "docker run -d --name sweepaccess-backend -p 80:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/sweepaccess-backend:latest"
+              "docker run -d --name sweepaccess-backend -p 80:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/sweepaccess-backend:latest",
+              "docker ps -a",
+              "docker logs sweepaccess-backend || echo 'No logs found'"
             ]}' \
             --region $AWS_REGION
 
