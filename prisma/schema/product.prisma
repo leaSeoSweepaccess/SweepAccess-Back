@@ -1,0 +1,22 @@
+model Product {
+  id           String        @id
+  name         String
+  tier         ProductTier
+  amount       Float
+  currency     String
+  //
+  orderDetails OrderDetail[]
+  //
+  createdAt    DateTime?     @default(now())
+  createdBy    String?
+  updatedAt    DateTime?     @updatedAt
+  updatedBy    String?
+  deletedAt    DateTime?
+  deletedBy    String?
+  isDeleted    Boolean       @default(false)
+}
+
+enum ProductTier {
+  FREE
+  PAID
+}

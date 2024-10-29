@@ -13,17 +13,17 @@ model User {
   password              String?
   isEmailVerified       Boolean       @default(false)
   emailVerificationCode String?
-  isDeleted             Boolean       @default(false)
+  //
   createdAt             DateTime?     @default(now())
   createdBy             String?
   updatedAt             DateTime?     @updatedAt
-  updatedBy             String?
   deletedAt             DateTime?
   deletedBy             String?
+  isDeleted             Boolean       @default(false)
+  updatedBy             String?
+  //
+  seat                  Seat?
+  tenant                Tenant[]
   UserSession           UserSession[]
   UserToken             UserToken[]
-  tenant                Tenant        @relation(fields: [tenantId], references: [id])
-  tenantId              String        @default("ten_default")
-  seat                  Seat?         @relation(fields: [seatId], references: [id])
-  seatId                String?       @unique
 }

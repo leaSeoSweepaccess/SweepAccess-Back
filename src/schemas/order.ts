@@ -5,11 +5,13 @@ import { CompleteTenant, relatedTenantSchema } from "./index"
 export const orderSchema = z.object({
   id: z.string(),
   tenantId: z.string(),
-  amount: z.number(),
+  amount: z.number().int(),
   currency: z.string(),
   status: z.nativeEnum(OrderStatus),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.date().nullish(),
+  createdBy: z.string().nullish(),
+  updatedAt: z.date().nullish(),
+  updatedBy: z.string().nullish(),
 })
 
 export interface CompleteOrder extends z.infer<typeof orderSchema> {

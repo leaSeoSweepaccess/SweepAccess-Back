@@ -1,12 +1,16 @@
 model Order {
   id        String      @id
-  tenant    Tenant      @relation(fields: [tenantId], references: [id])
   tenantId  String
-  amount    Float
+  amount    Int
   currency  String
   status    OrderStatus
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  // 
+  createdAt DateTime?   @default(now())
+  createdBy String?
+  updatedAt DateTime?   @updatedAt
+  updatedBy String?
+  //
+  tenant    Tenant      @relation(fields: [tenantId], references: [id])
 }
 
 enum OrderStatus {
